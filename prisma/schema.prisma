@@ -1,0 +1,309 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  CLIENT
+  CREATIVE
+  COLLABORATOR
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  IN_REVIEW
+  COMPLETED
+  CANCELLED
+  ARCHIVED
+}
+
+enum PaymentStatus {
+  DRAFT
+  ISSUED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  VOID
+  REFUNDED
+}
+
+enum TaxStatus {
+  GST_INCLUSIVE
+  GST_EXCLUSIVE
+  GST_FREE
+  OUT_OF_SCOPE
+}
+
+enum BookingStatus {
+  REQUESTED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum ComplianceStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  MORE_INFORMATION_REQUIRED
+  WITHDRAWN
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique @db.VarChar(320)
+  normalizedEmail String   @unique @db.VarChar(320)
+  passwordHash    String   @db.VarChar(255)
+  role            UserRole
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  profile             Profile?
+  projectsAsClient    Project[]               @relation("ProjectClient")
+  projectsAsCreative  Project[]               @relation("ProjectCreative")
+  invoices            Invoice[]               @relation("InvoiceClient")
+  bookingsAsClient    Booking[]               @relation("BookingClient")
+  bookingsAsCreative  Booking[]               @relation("BookingCreative")
+  eoiSubmissions      EoiSubmission[]
+  businessListings    BusinessListing[]       @relation("BusinessListingClient")
+  auditLogs           AuditLog[]              @relation("AuditActor")
+  creativeProfilePage CreativeProfilePage?    @relation("CreativeProfilePageCreative")
+  portfolioItems      CreativePortfolioItem[] @relation("CreativePortfolioItemCreative")
+
+  @@index([role, isActive])
+  @@index([createdAt])
+}
+
+model Profile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  publicSlug        String   @unique @db.VarChar(120)
+  displayName       String   @db.VarChar(160)
+  bio               String?  @db.VarChar(1200)
+  phoneE164         String?  @db.VarChar(32)
+  websiteUrl        String?  @db.VarChar(2048)
+  avatarObjectKey   String?  @db.VarChar(512)
+  portfolioHeadline String?  @db.VarChar(180)
+  portfolioSummary  String?  @db.VarChar(1200)
+  portfolioItems    Json?
+  vCardPayload      Json?
+  isPublic          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([isPublic, publicSlug])
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  projectCode String        @unique @db.VarChar(40)
+  title       String        @db.VarChar(220)
+  summary     String?       @db.VarChar(1200)
+  status      ProjectStatus @default(DRAFT)
+  clientId    String
+  creativeId  String
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  client     User               @relation("ProjectClient", fields: [clientId], references: [id], onDelete: Restrict)
+  creative   User               @relation("ProjectCreative", fields: [creativeId], references: [id], onDelete: Restrict)
+  milestones ProjectMilestone[]
+  invoices   Invoice[]
+
+  @@index([clientId, status])
+  @@index([creativeId, status])
+  @@index([createdAt])
+}
+
+model ProjectMilestone {
+  id          String    @id @default(cuid())
+  projectId   String
+  title       String    @db.VarChar(180)
+  description String?   @db.VarChar(1200)
+  sortOrder   Int
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, sortOrder])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  projectId     String
+  clientId      String
+  invoiceNumber String        @unique @db.VarChar(60)
+  amountCents   Int
+  gstCents      Int           @default(0)
+  currency      String        @default("AUD") @db.Char(3)
+  taxStatus     TaxStatus
+  paymentStatus PaymentStatus @default(DRAFT)
+  issuedAt      DateTime?
+  dueAt         DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  client  User    @relation("InvoiceClient", fields: [clientId], references: [id], onDelete: Restrict)
+
+  @@index([projectId, paymentStatus])
+  @@index([clientId, paymentStatus])
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  creativeId      String
+  clientId        String?
+  clientName      String        @db.VarChar(160)
+  clientEmail     String        @db.VarChar(320)
+  clientPhoneE164 String?       @db.VarChar(32)
+  status          BookingStatus @default(REQUESTED)
+  scheduledTime   DateTime
+  durationMinutes Int
+  notes           String?       @db.VarChar(1200)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  creative User  @relation("BookingCreative", fields: [creativeId], references: [id], onDelete: Restrict)
+  client   User? @relation("BookingClient", fields: [clientId], references: [id], onDelete: SetNull)
+
+  @@unique([creativeId, scheduledTime])
+  @@index([clientEmail])
+  @@index([scheduledTime])
+}
+
+model EoiSubmission {
+  id                    String           @id @default(cuid())
+  referenceCode         String           @unique @db.VarChar(60)
+  collaboratorId        String
+  filmProjectName       String           @db.VarChar(220)
+  investmentAmountCents Int
+  currency              String           @default("AUD") @db.Char(3)
+  complianceStatus      ComplianceStatus @default(SUBMITTED)
+  encryptedPayload      Bytes            @db.ByteA
+  encryptionKeyRef      String           @db.VarChar(255)
+  riskAcknowledgedAt    DateTime
+  submittedAt           DateTime         @default(now())
+  reviewedAt            DateTime?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  collaborator User @relation(fields: [collaboratorId], references: [id], onDelete: Restrict)
+
+  @@index([collaboratorId, complianceStatus])
+  @@index([submittedAt])
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  actorId      String?
+  action       String   @db.VarChar(120)
+  resourceType String?  @db.VarChar(120)
+  resourceId   String?  @db.VarChar(160)
+  ipAddress    String?  @db.Inet
+  userAgent    String?  @db.VarChar(512)
+  metadata     Json?
+  timestamp    DateTime @default(now())
+
+  actor User? @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, timestamp])
+  @@index([action, timestamp])
+  @@index([resourceType, resourceId])
+}
+
+model BusinessListing {
+  id               String   @id @default(cuid())
+  clientId         String
+  publicSlug       String   @unique @db.VarChar(140)
+  businessName     String   @db.VarChar(180)
+  headline         String   @db.VarChar(220)
+  description      String?  @db.VarChar(1600)
+  websiteUrl       String?  @db.VarChar(2048)
+  contactEmail     String?  @db.VarChar(320)
+  contactPhoneE164 String?  @db.VarChar(32)
+  seoTitle         String?  @db.VarChar(180)
+  seoDescription   String?  @db.VarChar(300)
+  isPublished      Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  client User           @relation("BusinessListingClient", fields: [clientId], references: [id], onDelete: Cascade)
+  offers ListingOffer[]
+
+  @@index([clientId, isPublished])
+  @@index([publicSlug, isPublished])
+}
+
+model ListingOffer {
+  id                String    @id @default(cuid())
+  businessListingId String
+  title             String    @db.VarChar(180)
+  description       String?   @db.VarChar(1200)
+  startsAt          DateTime?
+  endsAt            DateTime?
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  businessListing BusinessListing @relation(fields: [businessListingId], references: [id], onDelete: Cascade)
+
+  @@index([businessListingId, isActive])
+}
+
+model CreativeProfilePage {
+  id            String   @id @default(cuid())
+  creativeId    String   @unique
+  publicHandle  String   @unique @db.VarChar(80)
+  headline      String   @db.VarChar(220)
+  bio           String?  @db.VarChar(1600)
+  locationLabel String?  @db.VarChar(120)
+  websiteUrl    String?  @db.VarChar(2048)
+  contactEmail  String?  @db.VarChar(320)
+  isPublished   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  creative User @relation("CreativeProfilePageCreative", fields: [creativeId], references: [id], onDelete: Cascade)
+
+  @@index([creativeId, isPublished])
+  @@index([publicHandle, isPublished])
+}
+
+model CreativePortfolioItem {
+  id          String   @id @default(cuid())
+  creativeId  String
+  title       String   @db.VarChar(180)
+  category    String   @db.VarChar(120)
+  description String?  @db.VarChar(1200)
+  mediaUrl    String?  @db.VarChar(2048)
+  externalUrl String?  @db.VarChar(2048)
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  creative User @relation("CreativePortfolioItemCreative", fields: [creativeId], references: [id], onDelete: Cascade)
+
+  @@index([creativeId, isPublished, sortOrder])
+}

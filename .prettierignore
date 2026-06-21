@@ -1,0 +1,11 @@
+.next
+node_modules
+pnpm-lock.yaml
+public
+coverage
+dist
+build
+.env
+.env.local
+.env.production
+generated

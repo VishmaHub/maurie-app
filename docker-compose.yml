@@ -1,0 +1,16 @@
+services:
+  maurie_postgres:
+    image: postgres:17-alpine
+    container_name: maurie_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: maurie_admin
+      POSTGRES_PASSWORD: maurie_local_password_change_before_production
+      POSTGRES_DB: maurie_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - maurie_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  maurie_postgres_data:
