@@ -28,6 +28,10 @@ export const ROLE_NAVIGATION: Record<UserRole, readonly NavigationItem[]> = {
     {
       label: "Users",
       href: "/dashboard/admin/users"
+    },
+    {
+      label: "Audit Logs",
+      href: "/dashboard/admin/audit-logs"
     }
   ],
   CLIENT: [
