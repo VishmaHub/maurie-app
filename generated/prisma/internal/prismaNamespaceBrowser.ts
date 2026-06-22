@@ -62,7 +62,9 @@ export const ModelName = {
   BusinessListing: 'BusinessListing',
   ListingOffer: 'ListingOffer',
   CreativeProfilePage: 'CreativeProfilePage',
-  CreativePortfolioItem: 'CreativePortfolioItem'
+  CreativePortfolioItem: 'CreativePortfolioItem',
+  CampaignRoom: 'CampaignRoom',
+  CampaignRoomAsset: 'CampaignRoomAsset'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -287,6 +289,38 @@ export const CreativePortfolioItemScalarFieldEnum = {
 } as const
 
 export type CreativePortfolioItemScalarFieldEnum = (typeof CreativePortfolioItemScalarFieldEnum)[keyof typeof CreativePortfolioItemScalarFieldEnum]
+
+
+export const CampaignRoomScalarFieldEnum = {
+  id: 'id',
+  collaboratorId: 'collaboratorId',
+  campaignCode: 'campaignCode',
+  title: 'title',
+  summary: 'summary',
+  status: 'status',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  isConfidential: 'isConfidential',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampaignRoomScalarFieldEnum = (typeof CampaignRoomScalarFieldEnum)[keyof typeof CampaignRoomScalarFieldEnum]
+
+
+export const CampaignRoomAssetScalarFieldEnum = {
+  id: 'id',
+  campaignRoomId: 'campaignRoomId',
+  title: 'title',
+  assetType: 'assetType',
+  description: 'description',
+  resourceUrl: 'resourceUrl',
+  isVisible: 'isVisible',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampaignRoomAssetScalarFieldEnum = (typeof CampaignRoomAssetScalarFieldEnum)[keyof typeof CampaignRoomAssetScalarFieldEnum]
 
 
 export const SortOrder = {

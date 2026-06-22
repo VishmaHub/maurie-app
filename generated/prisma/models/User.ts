@@ -217,6 +217,7 @@ export type UserWhereInput = {
   auditLogs?: Prisma.AuditLogListRelationFilter
   creativeProfilePage?: Prisma.XOR<Prisma.CreativeProfilePageNullableScalarRelationFilter, Prisma.CreativeProfilePageWhereInput> | null
   portfolioItems?: Prisma.CreativePortfolioItemListRelationFilter
+  campaignRooms?: Prisma.CampaignRoomListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -239,6 +240,7 @@ export type UserOrderByWithRelationInput = {
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   creativeProfilePage?: Prisma.CreativeProfilePageOrderByWithRelationInput
   portfolioItems?: Prisma.CreativePortfolioItemOrderByRelationAggregateInput
+  campaignRooms?: Prisma.CampaignRoomOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -264,6 +266,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   auditLogs?: Prisma.AuditLogListRelationFilter
   creativeProfilePage?: Prisma.XOR<Prisma.CreativeProfilePageNullableScalarRelationFilter, Prisma.CreativeProfilePageWhereInput> | null
   portfolioItems?: Prisma.CreativePortfolioItemListRelationFilter
+  campaignRooms?: Prisma.CampaignRoomListRelationFilter
 }, "id" | "email" | "normalizedEmail">
 
 export type UserOrderByWithAggregationInput = {
@@ -314,6 +317,7 @@ export type UserCreateInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -336,6 +340,7 @@ export type UserUncheckedCreateInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUpdateInput = {
@@ -358,6 +363,7 @@ export type UserUpdateInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -380,6 +386,7 @@ export type UserUncheckedUpdateInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -632,6 +639,20 @@ export type UserUpdateOneRequiredWithoutPortfolioItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPortfolioItemsInput, Prisma.UserUpdateWithoutPortfolioItemsInput>, Prisma.UserUncheckedUpdateWithoutPortfolioItemsInput>
 }
 
+export type UserCreateNestedOneWithoutCampaignRoomsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampaignRoomsInput, Prisma.UserUncheckedCreateWithoutCampaignRoomsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampaignRoomsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCampaignRoomsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampaignRoomsInput, Prisma.UserUncheckedCreateWithoutCampaignRoomsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampaignRoomsInput
+  upsert?: Prisma.UserUpsertWithoutCampaignRoomsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCampaignRoomsInput, Prisma.UserUpdateWithoutCampaignRoomsInput>, Prisma.UserUncheckedUpdateWithoutCampaignRoomsInput>
+}
+
 export type UserCreateWithoutProfileInput = {
   id?: string
   email: string
@@ -651,6 +672,7 @@ export type UserCreateWithoutProfileInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutProfileInput = {
@@ -672,6 +694,7 @@ export type UserUncheckedCreateWithoutProfileInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutProfileInput = {
@@ -709,6 +732,7 @@ export type UserUpdateWithoutProfileInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfileInput = {
@@ -730,6 +754,7 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutProjectsAsClientInput = {
@@ -751,6 +776,7 @@ export type UserCreateWithoutProjectsAsClientInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutProjectsAsClientInput = {
@@ -772,6 +798,7 @@ export type UserUncheckedCreateWithoutProjectsAsClientInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutProjectsAsClientInput = {
@@ -798,6 +825,7 @@ export type UserCreateWithoutProjectsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutProjectsAsCreativeInput = {
@@ -819,6 +847,7 @@ export type UserUncheckedCreateWithoutProjectsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutProjectsAsCreativeInput = {
@@ -856,6 +885,7 @@ export type UserUpdateWithoutProjectsAsClientInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsAsClientInput = {
@@ -877,6 +907,7 @@ export type UserUncheckedUpdateWithoutProjectsAsClientInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUpsertWithoutProjectsAsCreativeInput = {
@@ -909,6 +940,7 @@ export type UserUpdateWithoutProjectsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsAsCreativeInput = {
@@ -930,6 +962,7 @@ export type UserUncheckedUpdateWithoutProjectsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutInvoicesInput = {
@@ -951,6 +984,7 @@ export type UserCreateWithoutInvoicesInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutInvoicesInput = {
@@ -972,6 +1006,7 @@ export type UserUncheckedCreateWithoutInvoicesInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutInvoicesInput = {
@@ -1009,6 +1044,7 @@ export type UserUpdateWithoutInvoicesInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvoicesInput = {
@@ -1030,6 +1066,7 @@ export type UserUncheckedUpdateWithoutInvoicesInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutBookingsAsCreativeInput = {
@@ -1051,6 +1088,7 @@ export type UserCreateWithoutBookingsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutBookingsAsCreativeInput = {
@@ -1072,6 +1110,7 @@ export type UserUncheckedCreateWithoutBookingsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutBookingsAsCreativeInput = {
@@ -1098,6 +1137,7 @@ export type UserCreateWithoutBookingsAsClientInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutBookingsAsClientInput = {
@@ -1119,6 +1159,7 @@ export type UserUncheckedCreateWithoutBookingsAsClientInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutBookingsAsClientInput = {
@@ -1156,6 +1197,7 @@ export type UserUpdateWithoutBookingsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsAsCreativeInput = {
@@ -1177,6 +1219,7 @@ export type UserUncheckedUpdateWithoutBookingsAsCreativeInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUpsertWithoutBookingsAsClientInput = {
@@ -1209,6 +1252,7 @@ export type UserUpdateWithoutBookingsAsClientInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsAsClientInput = {
@@ -1230,6 +1274,7 @@ export type UserUncheckedUpdateWithoutBookingsAsClientInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutEoiSubmissionsInput = {
@@ -1251,6 +1296,7 @@ export type UserCreateWithoutEoiSubmissionsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutEoiSubmissionsInput = {
@@ -1272,6 +1318,7 @@ export type UserUncheckedCreateWithoutEoiSubmissionsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutEoiSubmissionsInput = {
@@ -1309,6 +1356,7 @@ export type UserUpdateWithoutEoiSubmissionsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEoiSubmissionsInput = {
@@ -1330,6 +1378,7 @@ export type UserUncheckedUpdateWithoutEoiSubmissionsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1351,6 +1400,7 @@ export type UserCreateWithoutAuditLogsInput = {
   businessListings?: Prisma.BusinessListingCreateNestedManyWithoutClientInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1372,6 +1422,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   businessListings?: Prisma.BusinessListingUncheckedCreateNestedManyWithoutClientInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1409,6 +1460,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   businessListings?: Prisma.BusinessListingUpdateManyWithoutClientNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1430,6 +1482,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   businessListings?: Prisma.BusinessListingUncheckedUpdateManyWithoutClientNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutBusinessListingsInput = {
@@ -1451,6 +1504,7 @@ export type UserCreateWithoutBusinessListingsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutBusinessListingsInput = {
@@ -1472,6 +1526,7 @@ export type UserUncheckedCreateWithoutBusinessListingsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutBusinessListingsInput = {
@@ -1509,6 +1564,7 @@ export type UserUpdateWithoutBusinessListingsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBusinessListingsInput = {
@@ -1530,6 +1586,7 @@ export type UserUncheckedUpdateWithoutBusinessListingsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutCreativeProfilePageInput = {
@@ -1551,6 +1608,7 @@ export type UserCreateWithoutCreativeProfilePageInput = {
   businessListings?: Prisma.BusinessListingCreateNestedManyWithoutClientInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutCreativeProfilePageInput = {
@@ -1572,6 +1630,7 @@ export type UserUncheckedCreateWithoutCreativeProfilePageInput = {
   businessListings?: Prisma.BusinessListingUncheckedCreateNestedManyWithoutClientInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutCreativeProfilePageInput = {
@@ -1609,6 +1668,7 @@ export type UserUpdateWithoutCreativeProfilePageInput = {
   businessListings?: Prisma.BusinessListingUpdateManyWithoutClientNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreativeProfilePageInput = {
@@ -1630,6 +1690,7 @@ export type UserUncheckedUpdateWithoutCreativeProfilePageInput = {
   businessListings?: Prisma.BusinessListingUncheckedUpdateManyWithoutClientNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutPortfolioItemsInput = {
@@ -1651,6 +1712,7 @@ export type UserCreateWithoutPortfolioItemsInput = {
   businessListings?: Prisma.BusinessListingCreateNestedManyWithoutClientInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserUncheckedCreateWithoutPortfolioItemsInput = {
@@ -1672,6 +1734,7 @@ export type UserUncheckedCreateWithoutPortfolioItemsInput = {
   businessListings?: Prisma.BusinessListingUncheckedCreateNestedManyWithoutClientInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
 }
 
 export type UserCreateOrConnectWithoutPortfolioItemsInput = {
@@ -1709,6 +1772,7 @@ export type UserUpdateWithoutPortfolioItemsInput = {
   businessListings?: Prisma.BusinessListingUpdateManyWithoutClientNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -1730,6 +1794,111 @@ export type UserUncheckedUpdateWithoutPortfolioItemsInput = {
   businessListings?: Prisma.BusinessListingUncheckedUpdateManyWithoutClientNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+}
+
+export type UserCreateWithoutCampaignRoomsInput = {
+  id?: string
+  email: string
+  normalizedEmail: string
+  passwordHash: string
+  role: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  projectsAsClient?: Prisma.ProjectCreateNestedManyWithoutClientInput
+  projectsAsCreative?: Prisma.ProjectCreateNestedManyWithoutCreativeInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutClientInput
+  bookingsAsClient?: Prisma.BookingCreateNestedManyWithoutClientInput
+  bookingsAsCreative?: Prisma.BookingCreateNestedManyWithoutCreativeInput
+  eoiSubmissions?: Prisma.EoiSubmissionCreateNestedManyWithoutCollaboratorInput
+  businessListings?: Prisma.BusinessListingCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
+  portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+}
+
+export type UserUncheckedCreateWithoutCampaignRoomsInput = {
+  id?: string
+  email: string
+  normalizedEmail: string
+  passwordHash: string
+  role: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  projectsAsClient?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
+  projectsAsCreative?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreativeInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutClientInput
+  bookingsAsClient?: Prisma.BookingUncheckedCreateNestedManyWithoutClientInput
+  bookingsAsCreative?: Prisma.BookingUncheckedCreateNestedManyWithoutCreativeInput
+  eoiSubmissions?: Prisma.EoiSubmissionUncheckedCreateNestedManyWithoutCollaboratorInput
+  businessListings?: Prisma.BusinessListingUncheckedCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
+  portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+}
+
+export type UserCreateOrConnectWithoutCampaignRoomsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampaignRoomsInput, Prisma.UserUncheckedCreateWithoutCampaignRoomsInput>
+}
+
+export type UserUpsertWithoutCampaignRoomsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCampaignRoomsInput, Prisma.UserUncheckedUpdateWithoutCampaignRoomsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampaignRoomsInput, Prisma.UserUncheckedCreateWithoutCampaignRoomsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCampaignRoomsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCampaignRoomsInput, Prisma.UserUncheckedUpdateWithoutCampaignRoomsInput>
+}
+
+export type UserUpdateWithoutCampaignRoomsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  projectsAsClient?: Prisma.ProjectUpdateManyWithoutClientNestedInput
+  projectsAsCreative?: Prisma.ProjectUpdateManyWithoutCreativeNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutClientNestedInput
+  bookingsAsClient?: Prisma.BookingUpdateManyWithoutClientNestedInput
+  bookingsAsCreative?: Prisma.BookingUpdateManyWithoutCreativeNestedInput
+  eoiSubmissions?: Prisma.EoiSubmissionUpdateManyWithoutCollaboratorNestedInput
+  businessListings?: Prisma.BusinessListingUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
+  portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCampaignRoomsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  projectsAsClient?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
+  projectsAsCreative?: Prisma.ProjectUncheckedUpdateManyWithoutCreativeNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutClientNestedInput
+  bookingsAsClient?: Prisma.BookingUncheckedUpdateManyWithoutClientNestedInput
+  bookingsAsCreative?: Prisma.BookingUncheckedUpdateManyWithoutCreativeNestedInput
+  eoiSubmissions?: Prisma.EoiSubmissionUncheckedUpdateManyWithoutCollaboratorNestedInput
+  businessListings?: Prisma.BusinessListingUncheckedUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
+  portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
 }
 
 
@@ -1747,6 +1916,7 @@ export type UserCountOutputType = {
   businessListings: number
   auditLogs: number
   portfolioItems: number
+  campaignRooms: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1759,6 +1929,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   businessListings?: boolean | UserCountOutputTypeCountBusinessListingsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   portfolioItems?: boolean | UserCountOutputTypeCountPortfolioItemsArgs
+  campaignRooms?: boolean | UserCountOutputTypeCountCampaignRoomsArgs
 }
 
 /**
@@ -1834,6 +2005,13 @@ export type UserCountOutputTypeCountPortfolioItemsArgs<ExtArgs extends runtime.T
   where?: Prisma.CreativePortfolioItemWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCampaignRoomsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampaignRoomWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1855,6 +2033,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   creativeProfilePage?: boolean | Prisma.User$creativeProfilePageArgs<ExtArgs>
   portfolioItems?: boolean | Prisma.User$portfolioItemsArgs<ExtArgs>
+  campaignRooms?: boolean | Prisma.User$campaignRoomsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1904,6 +2083,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   creativeProfilePage?: boolean | Prisma.User$creativeProfilePageArgs<ExtArgs>
   portfolioItems?: boolean | Prisma.User$portfolioItemsArgs<ExtArgs>
+  campaignRooms?: boolean | Prisma.User$campaignRoomsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1923,6 +2103,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     creativeProfilePage: Prisma.$CreativeProfilePagePayload<ExtArgs> | null
     portfolioItems: Prisma.$CreativePortfolioItemPayload<ExtArgs>[]
+    campaignRooms: Prisma.$CampaignRoomPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2338,6 +2519,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   creativeProfilePage<T extends Prisma.User$creativeProfilePageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$creativeProfilePageArgs<ExtArgs>>): Prisma.Prisma__CreativeProfilePageClient<runtime.Types.Result.GetResult<Prisma.$CreativeProfilePagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   portfolioItems<T extends Prisma.User$portfolioItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$portfolioItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreativePortfolioItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campaignRooms<T extends Prisma.User$campaignRoomsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campaignRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3019,6 +3201,30 @@ export type User$portfolioItemsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.CreativePortfolioItemScalarFieldEnum | Prisma.CreativePortfolioItemScalarFieldEnum[]
+}
+
+/**
+ * User.campaignRooms
+ */
+export type User$campaignRoomsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignRoom
+   */
+  select?: Prisma.CampaignRoomSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampaignRoom
+   */
+  omit?: Prisma.CampaignRoomOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignRoomInclude<ExtArgs> | null
+  where?: Prisma.CampaignRoomWhereInput
+  orderBy?: Prisma.CampaignRoomOrderByWithRelationInput | Prisma.CampaignRoomOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignRoomWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignRoomScalarFieldEnum | Prisma.CampaignRoomScalarFieldEnum[]
 }
 
 /**

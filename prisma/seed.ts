@@ -441,6 +441,7 @@ async function main(): Promise<void> {
   });
 
   //this is the inside main() section
+
   await prisma.creativeProfilePage.upsert({
     where: {
       publicHandle: "maurie-creative-demo"
@@ -521,6 +522,83 @@ async function main(): Promise<void> {
       externalUrl: "https://mauri-e.com",
       sortOrder: 2,
       isPublished: true
+    }
+  });
+
+  const campaignRoom = await prisma.campaignRoom.upsert({
+    where: {
+      campaignCode: "CAM-ME-2026-001"
+    },
+    update: {
+      collaboratorId: collaborator.id,
+      title: "Mauri-E Cultural Storytelling Campaign",
+      summary:
+        "A sample collaborator campaign room for managing private campaign details, shared assets, collaboration notes, and future-ready EOI or event workflows.",
+      status: "ACTIVE",
+      startsAt: new Date("2026-03-01T00:00:00.000Z"),
+      endsAt: new Date("2026-06-30T23:59:59.000Z"),
+      isConfidential: true
+    },
+    create: {
+      collaboratorId: collaborator.id,
+      campaignCode: "CAM-ME-2026-001",
+      title: "Mauri-E Cultural Storytelling Campaign",
+      summary:
+        "A sample collaborator campaign room for managing private campaign details, shared assets, collaboration notes, and future-ready EOI or event workflows.",
+      status: "ACTIVE",
+      startsAt: new Date("2026-03-01T00:00:00.000Z"),
+      endsAt: new Date("2026-06-30T23:59:59.000Z"),
+      isConfidential: true
+    }
+  });
+
+  await prisma.campaignRoomAsset.upsert({
+    where: {
+      id: "local-demo-campaign-asset-001"
+    },
+    update: {
+      campaignRoomId: campaignRoom.id,
+      title: "Campaign Brief",
+      assetType: "Brief",
+      description:
+        "A sample campaign brief asset for outlining creative direction, audience, deliverables, and campaign purpose.",
+      resourceUrl: null,
+      isVisible: true
+    },
+    create: {
+      id: "local-demo-campaign-asset-001",
+      campaignRoomId: campaignRoom.id,
+      title: "Campaign Brief",
+      assetType: "Brief",
+      description:
+        "A sample campaign brief asset for outlining creative direction, audience, deliverables, and campaign purpose.",
+      resourceUrl: null,
+      isVisible: true
+    }
+  });
+
+  await prisma.campaignRoomAsset.upsert({
+    where: {
+      id: "local-demo-campaign-asset-002"
+    },
+    update: {
+      campaignRoomId: campaignRoom.id,
+      title: "Visual Direction Notes",
+      assetType: "Creative Notes",
+      description:
+        "Sample visual direction notes prepared for campaign collaborators, future production planning, and creative alignment.",
+      resourceUrl: null,
+      isVisible: true
+    },
+    create: {
+      id: "local-demo-campaign-asset-002",
+      campaignRoomId: campaignRoom.id,
+      title: "Visual Direction Notes",
+      assetType: "Creative Notes",
+      description:
+        "Sample visual direction notes prepared for campaign collaborators, future production planning, and creative alignment.",
+      resourceUrl: null,
+      isVisible: true
     }
   });
 

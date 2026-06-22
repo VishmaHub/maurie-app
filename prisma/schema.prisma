@@ -61,6 +61,14 @@ enum ComplianceStatus {
   WITHDRAWN
 }
 
+enum CampaignRoomStatus {
+  DRAFT
+  ACTIVE
+  REVIEW
+  COMPLETED
+  ARCHIVED
+}
+
 model User {
   id              String   @id @default(cuid())
   email           String   @unique @db.VarChar(320)
@@ -82,6 +90,7 @@ model User {
   auditLogs           AuditLog[]              @relation("AuditActor")
   creativeProfilePage CreativeProfilePage?    @relation("CreativeProfilePageCreative")
   portfolioItems      CreativePortfolioItem[] @relation("CreativePortfolioItemCreative")
+  campaignRooms       CampaignRoom[]          @relation("CampaignRoomCollaborator")
 
   @@index([role, isActive])
   @@index([createdAt])
@@ -306,4 +315,40 @@ model CreativePortfolioItem {
   creative User @relation("CreativePortfolioItemCreative", fields: [creativeId], references: [id], onDelete: Cascade)
 
   @@index([creativeId, isPublished, sortOrder])
+}
+
+model CampaignRoom {
+  id             String             @id @default(cuid())
+  collaboratorId String
+  campaignCode   String             @unique @db.VarChar(80)
+  title          String             @db.VarChar(180)
+  summary        String?            @db.VarChar(1200)
+  status         CampaignRoomStatus @default(DRAFT)
+  startsAt       DateTime?
+  endsAt         DateTime?
+  isConfidential Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  collaborator User                @relation("CampaignRoomCollaborator", fields: [collaboratorId], references: [id], onDelete: Cascade)
+  assets       CampaignRoomAsset[]
+
+  @@index([collaboratorId, status])
+  @@index([campaignCode])
+}
+
+model CampaignRoomAsset {
+  id             String   @id @default(cuid())
+  campaignRoomId String
+  title          String   @db.VarChar(180)
+  assetType      String   @db.VarChar(80)
+  description    String?  @db.VarChar(1200)
+  resourceUrl    String?  @db.VarChar(2048)
+  isVisible      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  campaignRoom CampaignRoom @relation(fields: [campaignRoomId], references: [id], onDelete: Cascade)
+
+  @@index([campaignRoomId, isVisible])
 }

@@ -101,3 +101,13 @@ export type CreativeProfilePage = Prisma.CreativeProfilePageModel
  * 
  */
 export type CreativePortfolioItem = Prisma.CreativePortfolioItemModel
+/**
+ * Model CampaignRoom
+ * 
+ */
+export type CampaignRoom = Prisma.CampaignRoomModel
+/**
+ * Model CampaignRoomAsset
+ * 
+ */
+export type CampaignRoomAsset = Prisma.CampaignRoomAssetModel

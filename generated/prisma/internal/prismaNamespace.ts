@@ -395,7 +395,9 @@ export const ModelName = {
   BusinessListing: 'BusinessListing',
   ListingOffer: 'ListingOffer',
   CreativeProfilePage: 'CreativeProfilePage',
-  CreativePortfolioItem: 'CreativePortfolioItem'
+  CreativePortfolioItem: 'CreativePortfolioItem',
+  CampaignRoom: 'CampaignRoom',
+  CampaignRoomAsset: 'CampaignRoomAsset'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "project" | "projectMilestone" | "invoice" | "booking" | "eoiSubmission" | "auditLog" | "businessListing" | "listingOffer" | "creativeProfilePage" | "creativePortfolioItem"
+    modelProps: "user" | "profile" | "project" | "projectMilestone" | "invoice" | "booking" | "eoiSubmission" | "auditLog" | "businessListing" | "listingOffer" | "creativeProfilePage" | "creativePortfolioItem" | "campaignRoom" | "campaignRoomAsset"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1303,6 +1305,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CampaignRoom: {
+      payload: Prisma.$CampaignRoomPayload<ExtArgs>
+      fields: Prisma.CampaignRoomFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CampaignRoomFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CampaignRoomFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>
+        }
+        findFirst: {
+          args: Prisma.CampaignRoomFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CampaignRoomFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>
+        }
+        findMany: {
+          args: Prisma.CampaignRoomFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>[]
+        }
+        create: {
+          args: Prisma.CampaignRoomCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>
+        }
+        createMany: {
+          args: Prisma.CampaignRoomCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CampaignRoomCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>[]
+        }
+        delete: {
+          args: Prisma.CampaignRoomDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>
+        }
+        update: {
+          args: Prisma.CampaignRoomUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>
+        }
+        deleteMany: {
+          args: Prisma.CampaignRoomDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CampaignRoomUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CampaignRoomUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>[]
+        }
+        upsert: {
+          args: Prisma.CampaignRoomUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomPayload>
+        }
+        aggregate: {
+          args: Prisma.CampaignRoomAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCampaignRoom>
+        }
+        groupBy: {
+          args: Prisma.CampaignRoomGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignRoomGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CampaignRoomCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignRoomCountAggregateOutputType> | number
+        }
+      }
+    }
+    CampaignRoomAsset: {
+      payload: Prisma.$CampaignRoomAssetPayload<ExtArgs>
+      fields: Prisma.CampaignRoomAssetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CampaignRoomAssetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CampaignRoomAssetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>
+        }
+        findFirst: {
+          args: Prisma.CampaignRoomAssetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CampaignRoomAssetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>
+        }
+        findMany: {
+          args: Prisma.CampaignRoomAssetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>[]
+        }
+        create: {
+          args: Prisma.CampaignRoomAssetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>
+        }
+        createMany: {
+          args: Prisma.CampaignRoomAssetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CampaignRoomAssetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>[]
+        }
+        delete: {
+          args: Prisma.CampaignRoomAssetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>
+        }
+        update: {
+          args: Prisma.CampaignRoomAssetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>
+        }
+        deleteMany: {
+          args: Prisma.CampaignRoomAssetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CampaignRoomAssetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CampaignRoomAssetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>[]
+        }
+        upsert: {
+          args: Prisma.CampaignRoomAssetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignRoomAssetPayload>
+        }
+        aggregate: {
+          args: Prisma.CampaignRoomAssetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCampaignRoomAsset>
+        }
+        groupBy: {
+          args: Prisma.CampaignRoomAssetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignRoomAssetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CampaignRoomAssetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignRoomAssetCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1550,6 +1700,38 @@ export const CreativePortfolioItemScalarFieldEnum = {
 export type CreativePortfolioItemScalarFieldEnum = (typeof CreativePortfolioItemScalarFieldEnum)[keyof typeof CreativePortfolioItemScalarFieldEnum]
 
 
+export const CampaignRoomScalarFieldEnum = {
+  id: 'id',
+  collaboratorId: 'collaboratorId',
+  campaignCode: 'campaignCode',
+  title: 'title',
+  summary: 'summary',
+  status: 'status',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  isConfidential: 'isConfidential',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampaignRoomScalarFieldEnum = (typeof CampaignRoomScalarFieldEnum)[keyof typeof CampaignRoomScalarFieldEnum]
+
+
+export const CampaignRoomAssetScalarFieldEnum = {
+  id: 'id',
+  campaignRoomId: 'campaignRoomId',
+  title: 'title',
+  assetType: 'assetType',
+  description: 'description',
+  resourceUrl: 'resourceUrl',
+  isVisible: 'isVisible',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampaignRoomAssetScalarFieldEnum = (typeof CampaignRoomAssetScalarFieldEnum)[keyof typeof CampaignRoomAssetScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1759,6 +1941,20 @@ export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
+ * Reference to a field of type 'CampaignRoomStatus'
+ */
+export type EnumCampaignRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignRoomStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CampaignRoomStatus[]'
+ */
+export type ListEnumCampaignRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignRoomStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1893,6 +2089,8 @@ export type GlobalOmitConfig = {
   listingOffer?: Prisma.ListingOfferOmit
   creativeProfilePage?: Prisma.CreativeProfilePageOmit
   creativePortfolioItem?: Prisma.CreativePortfolioItemOmit
+  campaignRoom?: Prisma.CampaignRoomOmit
+  campaignRoomAsset?: Prisma.CampaignRoomAssetOmit
 }
 
 /* Types for Logging */

@@ -74,3 +74,14 @@ export const ComplianceStatus = {
 } as const
 
 export type ComplianceStatus = (typeof ComplianceStatus)[keyof typeof ComplianceStatus]
+
+
+export const CampaignRoomStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  REVIEW: 'REVIEW',
+  COMPLETED: 'COMPLETED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CampaignRoomStatus = (typeof CampaignRoomStatus)[keyof typeof CampaignRoomStatus]
