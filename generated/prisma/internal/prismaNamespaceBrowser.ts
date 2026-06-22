@@ -64,7 +64,8 @@ export const ModelName = {
   CreativeProfilePage: 'CreativeProfilePage',
   CreativePortfolioItem: 'CreativePortfolioItem',
   CampaignRoom: 'CampaignRoom',
-  CampaignRoomAsset: 'CampaignRoomAsset'
+  CampaignRoomAsset: 'CampaignRoomAsset',
+  PlatformSetting: 'PlatformSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -321,6 +322,22 @@ export const CampaignRoomAssetScalarFieldEnum = {
 } as const
 
 export type CampaignRoomAssetScalarFieldEnum = (typeof CampaignRoomAssetScalarFieldEnum)[keyof typeof CampaignRoomAssetScalarFieldEnum]
+
+
+export const PlatformSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  label: 'label',
+  description: 'description',
+  category: 'category',
+  value: 'value',
+  valueType: 'valueType',
+  isSensitive: 'isSensitive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlatformSettingScalarFieldEnum = (typeof PlatformSettingScalarFieldEnum)[keyof typeof PlatformSettingScalarFieldEnum]
 
 
 export const SortOrder = {

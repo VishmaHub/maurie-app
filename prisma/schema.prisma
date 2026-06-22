@@ -353,3 +353,18 @@ model CampaignRoomAsset {
 
   @@index([campaignRoomId, isVisible])
 }
+
+model PlatformSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  label       String
+  description String?
+  category    String
+  value       String
+  valueType   String   @default("STRING")
+  isSensitive Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+}

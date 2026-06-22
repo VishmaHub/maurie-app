@@ -209,6 +209,11 @@ export default async function AdminDashboardPage() {
             description="Review incomplete records, empty states, metadata gaps, and admin data quality."
           />
           <AdminQuickLink
+            href="/dashboard/admin/settings"
+            label="Settings"
+            description="Review platform configuration, feature flags, billing defaults, and security indicators."
+          />
+          <AdminQuickLink
             href="/dashboard/admin/users"
             label="Users"
             description="Review all platform users and role assignments."

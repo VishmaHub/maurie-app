@@ -87,3 +87,8 @@ export type CampaignRoom = Prisma.CampaignRoomModel
  * 
  */
 export type CampaignRoomAsset = Prisma.CampaignRoomAssetModel
+/**
+ * Model PlatformSetting
+ * 
+ */
+export type PlatformSetting = Prisma.PlatformSettingModel
