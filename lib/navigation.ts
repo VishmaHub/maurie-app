@@ -34,6 +34,10 @@ export const ROLE_NAVIGATION: Record<UserRole, readonly NavigationItem[]> = {
       href: "/dashboard/admin/clients"
     },
     {
+      label: "Projects",
+      href: "/dashboard/admin/projects"
+    },
+    {
       label: "Audit Logs",
       href: "/dashboard/admin/audit-logs"
     }
