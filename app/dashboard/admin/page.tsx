@@ -204,6 +204,11 @@ export default async function AdminDashboardPage() {
             description="Find users, projects, invoices, listings, campaigns, and EOI records."
           />
           <AdminQuickLink
+            href="/dashboard/admin/data-integrity"
+            label="Data Health"
+            description="Review incomplete records, empty states, metadata gaps, and admin data quality."
+          />
+          <AdminQuickLink
             href="/dashboard/admin/users"
             label="Users"
             description="Review all platform users and role assignments."
