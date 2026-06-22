@@ -3,93 +3,77 @@ import type { UserRole } from "@/types/user-role";
 export interface NavigationItem {
   readonly label: string;
   readonly href: string;
-  readonly description: string;
-  readonly allowedRoles: readonly UserRole[];
 }
 
 export const ROLE_LABELS: Record<UserRole, string> = {
-  CLIENT: "Client Workspace",
-  CREATIVE: "Creative Studio",
-  COLLABORATOR: "Collaborator Suite"
+  ADMIN: "Admin",
+  CLIENT: "Client",
+  CREATIVE: "Creative",
+  COLLABORATOR: "Collaborator"
 };
 
 export const ROLE_DASHBOARD_PATHS: Record<UserRole, string> = {
+  ADMIN: "/dashboard/admin",
   CLIENT: "/dashboard/client",
   CREATIVE: "/dashboard/creative",
   COLLABORATOR: "/dashboard/collaborator"
 };
 
 export const ROLE_NAVIGATION: Record<UserRole, readonly NavigationItem[]> = {
+  ADMIN: [
+    {
+      label: "Overview",
+      href: "/dashboard/admin"
+    }
+  ],
   CLIENT: [
     {
+      label: "Overview",
+      href: "/dashboard/client"
+    },
+    {
       label: "Projects",
-      href: "/dashboard/client/projects",
-      description: "Track briefs, milestones, contracts, and delivery status.",
-      allowedRoles: ["CLIENT"]
+      href: "/dashboard/client/projects"
     },
     {
       label: "Financials",
-      href: "/dashboard/client/financials",
-      description: "View invoices, GST status, payments, and billing records.",
-      allowedRoles: ["CLIENT"]
+      href: "/dashboard/client/financials"
     },
     {
-      label: "Marketing Hub",
-      href: "/dashboard/client/marketing",
-      description: "Manage website updates, SEO tasks, and content scheduling.",
-      allowedRoles: ["CLIENT"]
-    },
-    {
-      label: "Listing Hub",
-      href: "/dashboard/client/listing",
-      description: "Maintain business details, active offers, and landing pages.",
-      allowedRoles: ["CLIENT"]
+      label: "Listing",
+      href: "/dashboard/client/listing"
     }
   ],
   CREATIVE: [
     {
-      label: "Portfolio",
-      href: "/dashboard/creative/portfolio",
-      description: "Manage creative work, proof, and public profile assets.",
-      allowedRoles: ["CREATIVE"]
+      label: "Overview",
+      href: "/dashboard/creative"
     },
     {
-      label: "vCard",
-      href: "/dashboard/creative/vcard",
-      description: "Build a shareable profile and Apple Wallet-ready identity layer.",
-      allowedRoles: ["CREATIVE"]
+      label: "Portfolio",
+      href: "/dashboard/creative/portfolio"
     },
     {
       label: "Bookings",
-      href: "/dashboard/creative/bookings",
-      description: "Manage appointments, availability, and client requests.",
-      allowedRoles: ["CREATIVE"]
-    },
-    {
-      label: "Time Tracker",
-      href: "/dashboard/creative/time-tracker",
-      description: "Log immutable work sessions for transparent billing.",
-      allowedRoles: ["CREATIVE"]
+      href: "/dashboard/creative/bookings"
     }
   ],
   COLLABORATOR: [
     {
-      label: "Campaign Rooms",
-      href: "/dashboard/collaborator/campaigns",
-      description: "Coordinate partner campaigns, activations, and event delivery.",
-      allowedRoles: ["COLLABORATOR"]
+      label: "Overview",
+      href: "/dashboard/collaborator"
     },
     {
-      label: "Event Sync",
-      href: "/dashboard/collaborator/events",
-      description: "Align deadlines, partners, production notes, and shared rooms.",
-      allowedRoles: ["COLLABORATOR"]
+      label: "Campaigns",
+      href: "/dashboard/collaborator/campaigns"
     },
     {
-      label: "Film Investment",
-      href: "/dashboard/collaborator/eoi",
-      description: "Submit and review secure film investment expressions of interest.",
-      allowedRoles: ["COLLABORATOR"]
+      label: "EOI",
+      href: "/dashboard/collaborator/eoi"
     }
   ]
 };
+
+export function getVisibleNavigation(role: UserRole): readonly NavigationItem[] {
+  return ROLE_NAVIGATION[role];
+}

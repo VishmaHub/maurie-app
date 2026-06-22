@@ -10,6 +10,7 @@
 */
 
 export const UserRole = {
+  ADMIN: 'ADMIN',
   CLIENT: 'CLIENT',
   CREATIVE: 'CREATIVE',
   COLLABORATOR: 'COLLABORATOR'

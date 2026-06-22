@@ -10,7 +10,8 @@ export type AuditAction =
   | "DASHBOARD_VIEW"
   | "CLIENT_DATA_READ"
   | "CREATIVE_DATA_READ"
-  | "COLLABORATOR_DATA_READ";
+  | "COLLABORATOR_DATA_READ"
+  | "ADMIN_DATA_READ";
 
 type AuditMetadataValue = string | number | boolean | null;
 

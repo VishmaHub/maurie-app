@@ -93,6 +93,14 @@ const prisma: PrismaClient = new PrismaClient({
 
 const seedUsers: readonly SeedUserInput[] = [
   {
+    email: "admin@maurie.local",
+    password: "MauriEAdmin#2026!",
+    role: UserRole.ADMIN,
+    displayName: "Mauri-E Admin",
+    publicSlug: "maurie-admin",
+    bio: "Demo admin account"
+  },
+  {
     email: "client@maurie.local",
     displayName: "Mauri-E Client Demo",
     role: UserRole.CLIENT,
@@ -143,7 +151,7 @@ async function seedUser(input: SeedUserInput) {
             publicSlug: input.publicSlug,
             displayName: input.displayName,
             bio: input.bio,
-            isPublic: true,
+            isPublic: input.role !== UserRole.ADMIN,
             portfolioHeadline,
             portfolioSummary,
             vCardPayload: getCreativeVCardPayload(input)
@@ -152,7 +160,7 @@ async function seedUser(input: SeedUserInput) {
             publicSlug: input.publicSlug,
             displayName: input.displayName,
             bio: input.bio,
-            isPublic: true,
+            isPublic: input.role !== UserRole.ADMIN,
             portfolioHeadline,
             portfolioSummary,
             vCardPayload: getCreativeVCardPayload(input)
@@ -171,7 +179,7 @@ async function seedUser(input: SeedUserInput) {
           publicSlug: input.publicSlug,
           displayName: input.displayName,
           bio: input.bio,
-          isPublic: true,
+          isPublic: input.role !== UserRole.ADMIN,
           portfolioHeadline,
           portfolioSummary,
           vCardPayload: getCreativeVCardPayload(input)
@@ -639,6 +647,8 @@ async function main(): Promise<void> {
       }
     ]
   });
+
+  await seedUser(getSeedUserByRole(UserRole.ADMIN));
 
   process.stdout.write("Mauri-E seed completed successfully.\n");
   process.stdout.write("Client login: client@maurie.local / MauriEClient#2026!\n");

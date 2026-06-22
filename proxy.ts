@@ -4,7 +4,7 @@ const SESSION_COOKIE_NAME: string =
   process.env.NODE_ENV === "production" ? "__Host-maurie_session" : "maurie_session";
 const SESSION_SECRET_ENV_NAME = "MAURIE_SESSION_SECRET" as const;
 
-const USER_ROLES = ["CLIENT", "CREATIVE", "COLLABORATOR"] as const;
+const USER_ROLES = ["ADMIN", "CLIENT", "CREATIVE", "COLLABORATOR"] as const;
 
 type UserRole = (typeof USER_ROLES)[number];
 
@@ -17,12 +17,14 @@ interface SessionClaims {
 }
 
 const ROLE_DASHBOARD_PATHS: Record<UserRole, string> = {
+  ADMIN: "/dashboard/admin",
   CLIENT: "/dashboard/client",
   CREATIVE: "/dashboard/creative",
   COLLABORATOR: "/dashboard/collaborator"
 };
 
 const DASHBOARD_PREFIXES: Record<UserRole, string> = {
+  ADMIN: "/dashboard/admin",
   CLIENT: "/dashboard/client",
   CREATIVE: "/dashboard/creative",
   COLLABORATOR: "/dashboard/collaborator"
