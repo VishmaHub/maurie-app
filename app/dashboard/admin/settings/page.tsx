@@ -2,9 +2,23 @@ import Link from "next/link";
 import { AppShell } from "@/components/layout/app-shell";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { writeAuditLog } from "@/lib/audit/audit-log";
-import { getAdminSettingsData } from "@/lib/admin-settings";
+import { updatePlatformSettingAction } from "@/lib/admin-settings-actions";
+import { getAdminSettingsData, type AdminPlatformSetting } from "@/lib/admin-settings";
 import { requireRole } from "@/lib/auth/require-role";
 import { formatDateTime } from "@/lib/formatters";
+
+interface AdminSettingsPageProps {
+  readonly searchParams: Promise<{
+    readonly status?: string;
+    readonly key?: string;
+  }>;
+}
+
+interface SettingsNotice {
+  readonly title: string;
+  readonly description: string;
+  readonly tone: "yellow" | "orange" | "neutral";
+}
 
 function getValueTone(valueType: string): "yellow" | "orange" | "neutral" {
   if (valueType === "SECRET") {
@@ -18,17 +32,154 @@ function getValueTone(valueType: string): "yellow" | "orange" | "neutral" {
   return "neutral";
 }
 
-export default async function AdminSettingsPage() {
+function getSettingsNotice(
+  status: string | undefined,
+  key: string | undefined
+): SettingsNotice | null {
+  if (status === "updated") {
+    return {
+      title: "Setting updated.",
+      description:
+        typeof key === "string"
+          ? `${key} was updated successfully.`
+          : "The setting was updated successfully.",
+      tone: "yellow"
+    };
+  }
+
+  if (status === "invalid") {
+    return {
+      title: "Invalid setting value.",
+      description: "The submitted value did not match the required setting type.",
+      tone: "orange"
+    };
+  }
+
+  if (status === "locked") {
+    return {
+      title: "Setting is locked.",
+      description: "Sensitive settings cannot be edited from the admin interface.",
+      tone: "orange"
+    };
+  }
+
+  if (status === "not-found") {
+    return {
+      title: "Setting not found.",
+      description: "The requested platform setting could not be found.",
+      tone: "orange"
+    };
+  }
+
+  return null;
+}
+
+function renderSettingInput(setting: AdminPlatformSetting) {
+  const baseClass =
+    "w-full rounded-2xl border border-[var(--maurie-border)] bg-white/70 px-4 py-3 text-sm text-[var(--maurie-text)] outline-none transition focus:border-[var(--maurie-orange)] disabled:cursor-not-allowed disabled:opacity-60";
+
+  if (setting.isSensitive) {
+    return (
+      <input
+        value={setting.value}
+        disabled
+        readOnly
+        className={baseClass}
+        aria-label={`${setting.label} value`}
+      />
+    );
+  }
+
+  if (setting.valueType === "BOOLEAN") {
+    return (
+      <select
+        name="value"
+        defaultValue={setting.value}
+        className={baseClass}
+        aria-label={`${setting.label} value`}
+      >
+        <option value="true">true</option>
+        <option value="false">false</option>
+      </select>
+    );
+  }
+
+  if (setting.valueType === "NUMBER") {
+    return (
+      <input
+        name="value"
+        type="number"
+        defaultValue={setting.value}
+        className={baseClass}
+        aria-label={`${setting.label} value`}
+      />
+    );
+  }
+
+  if (setting.valueType === "COLOUR") {
+    return (
+      <input
+        name="value"
+        type="text"
+        defaultValue={setting.value}
+        placeholder="#fdc324"
+        className={baseClass}
+        aria-label={`${setting.label} value`}
+      />
+    );
+  }
+
+  return (
+    <input
+      name="value"
+      type="text"
+      defaultValue={setting.value}
+      className={baseClass}
+      aria-label={`${setting.label} value`}
+    />
+  );
+}
+
+function SettingEditForm(props: { readonly setting: AdminPlatformSetting }) {
+  const isEditable = !props.setting.isSensitive;
+
+  return (
+    <form action={updatePlatformSettingAction} className="mt-4 grid gap-3 md:grid-cols-[1fr_auto]">
+      <input type="hidden" name="settingId" value={props.setting.id} />
+
+      <label className="grid gap-2">
+        <span className="text-xs font-semibold text-[var(--maurie-muted)]">Value</span>
+        {renderSettingInput(props.setting)}
+      </label>
+
+      <button
+        type="submit"
+        disabled={!isEditable}
+        className={
+          isEditable
+            ? "maurie-button-primary self-end"
+            : "maurie-button-secondary cursor-not-allowed self-end opacity-60"
+        }
+      >
+        {isEditable ? "Save" : "Locked"}
+      </button>
+    </form>
+  );
+}
+
+export default async function AdminSettingsPage(props: AdminSettingsPageProps) {
   const session = await requireRole("ADMIN");
+  const searchParams = await props.searchParams;
 
   await writeAuditLog({
     actorId: session.userId,
     action: "ADMIN_DATA_READ",
     resourceType: "AdminSettings",
-    resourceId: "admin-settings-foundation"
+    resourceId: "admin-settings-editing"
   });
 
   const data = await getAdminSettingsData();
+  const notice = getSettingsNotice(searchParams.status, searchParams.key);
 
   return (
     <AppShell role={session.role}>
@@ -43,8 +194,8 @@ export default async function AdminSettingsPage() {
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-6 text-[var(--maurie-muted)]">
-            Review Mauri-E platform settings, feature flags, brand defaults, billing configuration,
-            security indicators, and integration placeholders. Sensitive values are masked.
+            Review and update non-sensitive Mauri-E platform settings. Sensitive values remain
+            masked and locked from browser-based editing.
           </p>
         </div>
 
@@ -52,6 +203,24 @@ export default async function AdminSettingsPage() {
           Back to Admin
         </Link>
       </div>
+
+      {notice === null ? null : (
+        <section className="maurie-glass-soft mt-8 rounded-3xl p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold tracking-tight text-[var(--maurie-text)]">
+                {notice.title}
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-[var(--maurie-muted)]">
+                {notice.description}
+              </p>
+            </div>
+
+            <StatusBadge label={searchParams.status ?? "STATUS"} tone={notice.tone} />
+          </div>
+        </section>
+      )}
 
       <section className="mt-8 grid gap-4 md:grid-cols-4">
         <div className="maurie-glass-soft rounded-3xl p-5">
@@ -77,19 +246,19 @@ export default async function AdminSettingsPage() {
 
         <div className="maurie-glass-soft rounded-3xl p-5">
           <p className="text-sm text-[var(--maurie-muted)]">Mode</p>
-          <p className="mt-2 text-xl font-semibold text-[var(--maurie-text)]">Read-only</p>
+          <p className="mt-2 text-xl font-semibold text-[var(--maurie-text)]">Editable</p>
         </div>
       </section>
 
       <section className="maurie-glass-soft mt-8 rounded-3xl p-6">
         <h2 className="text-xl font-semibold tracking-tight text-[var(--maurie-text)]">
-          Settings foundation status
+          Editing rules
         </h2>
 
         <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--maurie-muted)]">
-          This foundation creates database-backed configuration records. Future phases can add
-          controlled editing, approval workflows, feature rollout rules, secret validation, and
-          environment-specific settings.
+          Non-sensitive settings can be edited directly. Boolean values must be true or false,
+          number values must be numeric, colour values must use a 6-digit hex code, and secret
+          settings remain locked.
         </p>
       </section>
 
@@ -139,21 +308,16 @@ export default async function AdminSettingsPage() {
                       />
 
                       {setting.isSensitive ? (
-                        <StatusBadge label="SENSITIVE" tone="orange" />
+                        <StatusBadge label="LOCKED" tone="orange" />
                       ) : (
-                        <StatusBadge label="PUBLIC VALUE" tone="neutral" />
+                        <StatusBadge label="EDITABLE" tone="yellow" />
                       )}
                     </div>
                   </div>
 
-                  <div className="mt-4 grid gap-3 md:grid-cols-3">
-                    <div className="rounded-3xl border border-[var(--maurie-border)] bg-white/30 p-4">
-                      <p className="text-xs text-[var(--maurie-muted)]">Value</p>
-                      <p className="mt-1 break-words text-sm font-semibold text-[var(--maurie-text)]">
-                        {setting.value}
-                      </p>
-                    </div>
+                  <SettingEditForm setting={setting} />
 
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
                     <div className="rounded-3xl border border-[var(--maurie-border)] bg-white/30 p-4">
                       <p className="text-xs text-[var(--maurie-muted)]">Created</p>
                       <p className="mt-1 text-sm font-semibold text-[var(--maurie-text)]">
