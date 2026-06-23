@@ -46,9 +46,15 @@ export default async function AdminListingsPage() {
           </p>
         </div>
 
-        <Link href="/dashboard/admin" className="maurie-button-secondary">
-          Back to Admin
-        </Link>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href="/dashboard/admin/listings/new" className="maurie-button-primary">
+            Create Listing
+          </Link>
+
+          <Link href="/dashboard/admin" className="maurie-button-secondary">
+            Back to Admin
+          </Link>
+        </div>
       </div>
 
       <section className="mt-8 grid gap-4 md:grid-cols-5">

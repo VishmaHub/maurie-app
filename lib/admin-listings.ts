@@ -50,12 +50,49 @@ export interface AdminListingDetail {
   readonly offers: readonly AdminListingOffer[];
 }
 
+export interface AdminListingClientOption {
+  readonly id: string;
+  readonly email: string;
+  readonly displayName: string;
+  readonly isActive: boolean;
+}
+
 function getDisplayName(profile: { readonly displayName: string } | null): string {
   if (profile === null) {
     return "Unnamed client";
   }
 
   return profile.displayName;
+}
+
+export async function getAdminListingClientOptions(): Promise<readonly AdminListingClientOption[]> {
+  const clients = await prisma.user.findMany({
+    where: {
+      role: "CLIENT"
+    },
+    orderBy: {
+      email: "asc"
+    },
+    select: {
+      id: true,
+      email: true,
+      isActive: true,
+      profile: {
+        select: {
+          displayName: true
+        }
+      }
+    }
+  });
+
+  return clients.map(
+    (client): AdminListingClientOption => ({
+      id: client.id,
+      email: client.email,
+      displayName: getDisplayName(client.profile),
+      isActive: client.isActive
+    })
+  );
 }
 
 export async function getAdminListings(): Promise<readonly AdminListingListItem[]> {

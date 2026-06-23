@@ -5,6 +5,10 @@ export function formDataToRecord(formData: FormData): FormDataRecord {
   const result: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
 
   for (const [key, value] of formData.entries()) {
+    if (key.startsWith("$ACTION_")) {
+      continue;
+    }
+
     const existingValue = result[key];
 
     if (typeof existingValue === "undefined") {

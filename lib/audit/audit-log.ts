@@ -12,6 +12,8 @@ export type AuditAction =
   | "CREATIVE_DATA_READ"
   | "COLLABORATOR_DATA_READ"
   | "ADMIN_DATA_READ"
+  | "ADMIN_LISTING_CREATE"
+  | "ADMIN_LISTING_UPDATE"
   | "ADMIN_SETTING_UPDATE"
   | "ADMIN_USER_STATUS_UPDATE";
 
@@ -39,7 +41,12 @@ function getFirstForwardedIp(forwardedFor: string | null): string | null {
   return firstIp;
 }
 
-export async function writeAuditLog(input: AuditLogInput): Promise<void> {
+type AuditDatabaseClient = Pick<Prisma.TransactionClient, "auditLog">;
+
+export async function writeAuditLog(
+  input: AuditLogInput,
+  database: AuditDatabaseClient = prisma
+): Promise<void> {
   const requestHeaders = await headers();
 
   const forwardedFor: string | null = requestHeaders.get("x-forwarded-for");
@@ -48,7 +55,7 @@ export async function writeAuditLog(input: AuditLogInput): Promise<void> {
 
   const ipAddress: string | null = realIp ?? getFirstForwardedIp(forwardedFor);
 
-  await prisma.auditLog.create({
+  await database.auditLog.create({
     data: {
       actorId: input.actorId,
       action: input.action,

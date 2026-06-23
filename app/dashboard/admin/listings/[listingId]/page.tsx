@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/layout/app-shell";
+import { FormNotice } from "@/components/ui/form-notice";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { writeAuditLog } from "@/lib/audit/audit-log";
 import { getAdminListingDetail } from "@/lib/admin-listings";
@@ -11,11 +12,15 @@ interface AdminListingDetailPageProps {
   readonly params: Promise<{
     readonly listingId: string;
   }>;
+  readonly searchParams: Promise<{
+    readonly status?: string;
+  }>;
 }
 
 export default async function AdminListingDetailPage(props: AdminListingDetailPageProps) {
   const session = await requireRole("ADMIN");
   const params = await props.params;
+  const searchParams = await props.searchParams;
 
   const listing = await getAdminListingDetail(params.listingId);
 
@@ -60,6 +65,13 @@ export default async function AdminListingDetailPage(props: AdminListingDetailPa
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
+          <Link
+            href={`/dashboard/admin/listings/${listing.id}/edit`}
+            className="maurie-button-primary"
+          >
+            Edit Listing
+          </Link>
+
           <Link href="/dashboard/admin/listings" className="maurie-button-secondary">
             Back to Listings
           </Link>
@@ -70,6 +82,15 @@ export default async function AdminListingDetailPage(props: AdminListingDetailPa
           />
         </div>
       </div>
+
+      {searchParams.status === "updated" ? (
+        <FormNotice
+          title="Listing updated."
+          message="The listing content and publication settings were saved successfully."
+          tone="success"
+          className="mt-8"
+        />
+      ) : null}
 
       <section className="mt-8 grid gap-4 md:grid-cols-5">
         <div className="maurie-glass-soft rounded-3xl p-5">
