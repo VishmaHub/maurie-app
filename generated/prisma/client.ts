@@ -77,6 +77,11 @@ export type Booking = Prisma.BookingModel
  */
 export type EoiSubmission = Prisma.EoiSubmissionModel
 /**
+ * Model CollaboratorApplication
+ * 
+ */
+export type CollaboratorApplication = Prisma.CollaboratorApplicationModel
+/**
  * Model AuditLog
  * 
  */

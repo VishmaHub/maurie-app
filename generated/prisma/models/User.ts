@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  authSessionVersion: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  authSessionVersion: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -31,6 +41,10 @@ export type UserMinAggregateOutputType = {
   passwordHash: string | null
   role: $Enums.UserRole | null
   isActive: boolean | null
+  emailVerifiedAt: Date | null
+  onboardingCompletedAt: Date | null
+  approvalStatus: $Enums.AccountApprovalStatus | null
+  authSessionVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +56,10 @@ export type UserMaxAggregateOutputType = {
   passwordHash: string | null
   role: $Enums.UserRole | null
   isActive: boolean | null
+  emailVerifiedAt: Date | null
+  onboardingCompletedAt: Date | null
+  approvalStatus: $Enums.AccountApprovalStatus | null
+  authSessionVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,11 +71,23 @@ export type UserCountAggregateOutputType = {
   passwordHash: number
   role: number
   isActive: number
+  emailVerifiedAt: number
+  onboardingCompletedAt: number
+  approvalStatus: number
+  authSessionVersion: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  authSessionVersion?: true
+}
+
+export type UserSumAggregateInputType = {
+  authSessionVersion?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -66,6 +96,10 @@ export type UserMinAggregateInputType = {
   passwordHash?: true
   role?: true
   isActive?: true
+  emailVerifiedAt?: true
+  onboardingCompletedAt?: true
+  approvalStatus?: true
+  authSessionVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,6 +111,10 @@ export type UserMaxAggregateInputType = {
   passwordHash?: true
   role?: true
   isActive?: true
+  emailVerifiedAt?: true
+  onboardingCompletedAt?: true
+  approvalStatus?: true
+  authSessionVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +126,10 @@ export type UserCountAggregateInputType = {
   passwordHash?: true
   role?: true
   isActive?: true
+  emailVerifiedAt?: true
+  onboardingCompletedAt?: true
+  approvalStatus?: true
+  authSessionVersion?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -131,6 +173,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -161,6 +215,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -172,9 +228,15 @@ export type UserGroupByOutputType = {
   passwordHash: string
   role: $Enums.UserRole
   isActive: boolean
+  emailVerifiedAt: Date | null
+  onboardingCompletedAt: Date | null
+  approvalStatus: $Enums.AccountApprovalStatus
+  authSessionVersion: number
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -204,6 +266,10 @@ export type UserWhereInput = {
   passwordHash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  onboardingCompletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFilter<"User"> | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profile?: Prisma.XOR<Prisma.ProfileNullableScalarRelationFilter, Prisma.ProfileWhereInput> | null
@@ -218,6 +284,8 @@ export type UserWhereInput = {
   creativeProfilePage?: Prisma.XOR<Prisma.CreativeProfilePageNullableScalarRelationFilter, Prisma.CreativeProfilePageWhereInput> | null
   portfolioItems?: Prisma.CreativePortfolioItemListRelationFilter
   campaignRooms?: Prisma.CampaignRoomListRelationFilter
+  collaboratorApplications?: Prisma.CollaboratorApplicationListRelationFilter
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -227,6 +295,10 @@ export type UserOrderByWithRelationInput = {
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  authSessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   profile?: Prisma.ProfileOrderByWithRelationInput
@@ -241,6 +313,8 @@ export type UserOrderByWithRelationInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageOrderByWithRelationInput
   portfolioItems?: Prisma.CreativePortfolioItemOrderByRelationAggregateInput
   campaignRooms?: Prisma.CampaignRoomOrderByRelationAggregateInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationOrderByRelationAggregateInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -253,6 +327,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordHash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  onboardingCompletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFilter<"User"> | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profile?: Prisma.XOR<Prisma.ProfileNullableScalarRelationFilter, Prisma.ProfileWhereInput> | null
@@ -267,6 +345,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   creativeProfilePage?: Prisma.XOR<Prisma.CreativeProfilePageNullableScalarRelationFilter, Prisma.CreativeProfilePageWhereInput> | null
   portfolioItems?: Prisma.CreativePortfolioItemListRelationFilter
   campaignRooms?: Prisma.CampaignRoomListRelationFilter
+  collaboratorApplications?: Prisma.CollaboratorApplicationListRelationFilter
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationListRelationFilter
 }, "id" | "email" | "normalizedEmail">
 
 export type UserOrderByWithAggregationInput = {
@@ -276,11 +356,17 @@ export type UserOrderByWithAggregationInput = {
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  authSessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -293,6 +379,10 @@ export type UserScalarWhereWithAggregatesInput = {
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  onboardingCompletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusWithAggregatesFilter<"User"> | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -304,6 +394,10 @@ export type UserCreateInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -318,6 +412,8 @@ export type UserCreateInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -327,6 +423,10 @@ export type UserUncheckedCreateInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -341,6 +441,8 @@ export type UserUncheckedCreateInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUpdateInput = {
@@ -350,6 +452,10 @@ export type UserUpdateInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -364,6 +470,8 @@ export type UserUpdateInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -373,6 +481,10 @@ export type UserUncheckedUpdateInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -387,6 +499,8 @@ export type UserUncheckedUpdateInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -396,6 +510,10 @@ export type UserCreateManyInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -407,6 +525,10 @@ export type UserUpdateManyMutationInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -418,6 +540,10 @@ export type UserUncheckedUpdateManyInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -429,8 +555,16 @@ export type UserCountOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  authSessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  authSessionVersion?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -440,6 +574,10 @@ export type UserMaxOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  authSessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -451,8 +589,16 @@ export type UserMinOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  authSessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  authSessionVersion?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -475,6 +621,22 @@ export type EnumUserRoleFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type EnumAccountApprovalStatusFieldUpdateOperationsInput = {
+  set?: $Enums.AccountApprovalStatus
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -581,6 +743,36 @@ export type UserUpdateOneRequiredWithoutEoiSubmissionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEoiSubmissionsInput, Prisma.UserUpdateWithoutEoiSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutEoiSubmissionsInput>
 }
 
+export type UserCreateNestedOneWithoutCollaboratorApplicationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutCollaboratorApplicationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCollaboratorApplicationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReviewedCollaboratorApplicationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutReviewedCollaboratorApplicationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedCollaboratorApplicationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCollaboratorApplicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutCollaboratorApplicationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCollaboratorApplicationsInput
+  upsert?: Prisma.UserUpsertWithoutCollaboratorApplicationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCollaboratorApplicationsInput, Prisma.UserUpdateWithoutCollaboratorApplicationsInput>, Prisma.UserUncheckedUpdateWithoutCollaboratorApplicationsInput>
+}
+
+export type UserUpdateOneWithoutReviewedCollaboratorApplicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutReviewedCollaboratorApplicationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedCollaboratorApplicationsInput
+  upsert?: Prisma.UserUpsertWithoutReviewedCollaboratorApplicationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedCollaboratorApplicationsInput, Prisma.UserUpdateWithoutReviewedCollaboratorApplicationsInput>, Prisma.UserUncheckedUpdateWithoutReviewedCollaboratorApplicationsInput>
+}
+
 export type UserCreateNestedOneWithoutAuditLogsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
@@ -660,6 +852,10 @@ export type UserCreateWithoutProfileInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   projectsAsClient?: Prisma.ProjectCreateNestedManyWithoutClientInput
@@ -673,6 +869,8 @@ export type UserCreateWithoutProfileInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutProfileInput = {
@@ -682,6 +880,10 @@ export type UserUncheckedCreateWithoutProfileInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   projectsAsClient?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -695,6 +897,8 @@ export type UserUncheckedCreateWithoutProfileInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutProfileInput = {
@@ -720,6 +924,10 @@ export type UserUpdateWithoutProfileInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projectsAsClient?: Prisma.ProjectUpdateManyWithoutClientNestedInput
@@ -733,6 +941,8 @@ export type UserUpdateWithoutProfileInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfileInput = {
@@ -742,6 +952,10 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projectsAsClient?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -755,6 +969,8 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutProjectsAsClientInput = {
@@ -764,6 +980,10 @@ export type UserCreateWithoutProjectsAsClientInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -777,6 +997,8 @@ export type UserCreateWithoutProjectsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutProjectsAsClientInput = {
@@ -786,6 +1008,10 @@ export type UserUncheckedCreateWithoutProjectsAsClientInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -799,6 +1025,8 @@ export type UserUncheckedCreateWithoutProjectsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutProjectsAsClientInput = {
@@ -813,6 +1041,10 @@ export type UserCreateWithoutProjectsAsCreativeInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -826,6 +1058,8 @@ export type UserCreateWithoutProjectsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutProjectsAsCreativeInput = {
@@ -835,6 +1069,10 @@ export type UserUncheckedCreateWithoutProjectsAsCreativeInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -848,6 +1086,8 @@ export type UserUncheckedCreateWithoutProjectsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutProjectsAsCreativeInput = {
@@ -873,6 +1113,10 @@ export type UserUpdateWithoutProjectsAsClientInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -886,6 +1130,8 @@ export type UserUpdateWithoutProjectsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsAsClientInput = {
@@ -895,6 +1141,10 @@ export type UserUncheckedUpdateWithoutProjectsAsClientInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -908,6 +1158,8 @@ export type UserUncheckedUpdateWithoutProjectsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUpsertWithoutProjectsAsCreativeInput = {
@@ -928,6 +1180,10 @@ export type UserUpdateWithoutProjectsAsCreativeInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -941,6 +1197,8 @@ export type UserUpdateWithoutProjectsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsAsCreativeInput = {
@@ -950,6 +1208,10 @@ export type UserUncheckedUpdateWithoutProjectsAsCreativeInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -963,6 +1225,8 @@ export type UserUncheckedUpdateWithoutProjectsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutInvoicesInput = {
@@ -972,6 +1236,10 @@ export type UserCreateWithoutInvoicesInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -985,6 +1253,8 @@ export type UserCreateWithoutInvoicesInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutInvoicesInput = {
@@ -994,6 +1264,10 @@ export type UserUncheckedCreateWithoutInvoicesInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1007,6 +1281,8 @@ export type UserUncheckedCreateWithoutInvoicesInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutInvoicesInput = {
@@ -1032,6 +1308,10 @@ export type UserUpdateWithoutInvoicesInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1045,6 +1325,8 @@ export type UserUpdateWithoutInvoicesInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvoicesInput = {
@@ -1054,6 +1336,10 @@ export type UserUncheckedUpdateWithoutInvoicesInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1067,6 +1353,8 @@ export type UserUncheckedUpdateWithoutInvoicesInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutBookingsAsCreativeInput = {
@@ -1076,6 +1364,10 @@ export type UserCreateWithoutBookingsAsCreativeInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1089,6 +1381,8 @@ export type UserCreateWithoutBookingsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutBookingsAsCreativeInput = {
@@ -1098,6 +1392,10 @@ export type UserUncheckedCreateWithoutBookingsAsCreativeInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1111,6 +1409,8 @@ export type UserUncheckedCreateWithoutBookingsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutBookingsAsCreativeInput = {
@@ -1125,6 +1425,10 @@ export type UserCreateWithoutBookingsAsClientInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1138,6 +1442,8 @@ export type UserCreateWithoutBookingsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutBookingsAsClientInput = {
@@ -1147,6 +1453,10 @@ export type UserUncheckedCreateWithoutBookingsAsClientInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1160,6 +1470,8 @@ export type UserUncheckedCreateWithoutBookingsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutBookingsAsClientInput = {
@@ -1185,6 +1497,10 @@ export type UserUpdateWithoutBookingsAsCreativeInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1198,6 +1514,8 @@ export type UserUpdateWithoutBookingsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsAsCreativeInput = {
@@ -1207,6 +1525,10 @@ export type UserUncheckedUpdateWithoutBookingsAsCreativeInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1220,6 +1542,8 @@ export type UserUncheckedUpdateWithoutBookingsAsCreativeInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUpsertWithoutBookingsAsClientInput = {
@@ -1240,6 +1564,10 @@ export type UserUpdateWithoutBookingsAsClientInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1253,6 +1581,8 @@ export type UserUpdateWithoutBookingsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsAsClientInput = {
@@ -1262,6 +1592,10 @@ export type UserUncheckedUpdateWithoutBookingsAsClientInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1275,6 +1609,8 @@ export type UserUncheckedUpdateWithoutBookingsAsClientInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutEoiSubmissionsInput = {
@@ -1284,6 +1620,10 @@ export type UserCreateWithoutEoiSubmissionsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1297,6 +1637,8 @@ export type UserCreateWithoutEoiSubmissionsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutEoiSubmissionsInput = {
@@ -1306,6 +1648,10 @@ export type UserUncheckedCreateWithoutEoiSubmissionsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1319,6 +1665,8 @@ export type UserUncheckedCreateWithoutEoiSubmissionsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutEoiSubmissionsInput = {
@@ -1344,6 +1692,10 @@ export type UserUpdateWithoutEoiSubmissionsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1357,6 +1709,8 @@ export type UserUpdateWithoutEoiSubmissionsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEoiSubmissionsInput = {
@@ -1366,6 +1720,10 @@ export type UserUncheckedUpdateWithoutEoiSubmissionsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1379,6 +1737,264 @@ export type UserUncheckedUpdateWithoutEoiSubmissionsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+}
+
+export type UserCreateWithoutCollaboratorApplicationsInput = {
+  id?: string
+  email: string
+  normalizedEmail: string
+  passwordHash: string
+  role: $Enums.UserRole
+  isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  projectsAsClient?: Prisma.ProjectCreateNestedManyWithoutClientInput
+  projectsAsCreative?: Prisma.ProjectCreateNestedManyWithoutCreativeInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutClientInput
+  bookingsAsClient?: Prisma.BookingCreateNestedManyWithoutClientInput
+  bookingsAsCreative?: Prisma.BookingCreateNestedManyWithoutCreativeInput
+  eoiSubmissions?: Prisma.EoiSubmissionCreateNestedManyWithoutCollaboratorInput
+  businessListings?: Prisma.BusinessListingCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
+  portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
+}
+
+export type UserUncheckedCreateWithoutCollaboratorApplicationsInput = {
+  id?: string
+  email: string
+  normalizedEmail: string
+  passwordHash: string
+  role: $Enums.UserRole
+  isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  projectsAsClient?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
+  projectsAsCreative?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreativeInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutClientInput
+  bookingsAsClient?: Prisma.BookingUncheckedCreateNestedManyWithoutClientInput
+  bookingsAsCreative?: Prisma.BookingUncheckedCreateNestedManyWithoutCreativeInput
+  eoiSubmissions?: Prisma.EoiSubmissionUncheckedCreateNestedManyWithoutCollaboratorInput
+  businessListings?: Prisma.BusinessListingUncheckedCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
+  portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+}
+
+export type UserCreateOrConnectWithoutCollaboratorApplicationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutCollaboratorApplicationsInput>
+}
+
+export type UserCreateWithoutReviewedCollaboratorApplicationsInput = {
+  id?: string
+  email: string
+  normalizedEmail: string
+  passwordHash: string
+  role: $Enums.UserRole
+  isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  projectsAsClient?: Prisma.ProjectCreateNestedManyWithoutClientInput
+  projectsAsCreative?: Prisma.ProjectCreateNestedManyWithoutCreativeInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutClientInput
+  bookingsAsClient?: Prisma.BookingCreateNestedManyWithoutClientInput
+  bookingsAsCreative?: Prisma.BookingCreateNestedManyWithoutCreativeInput
+  eoiSubmissions?: Prisma.EoiSubmissionCreateNestedManyWithoutCollaboratorInput
+  businessListings?: Prisma.BusinessListingCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
+  portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+}
+
+export type UserUncheckedCreateWithoutReviewedCollaboratorApplicationsInput = {
+  id?: string
+  email: string
+  normalizedEmail: string
+  passwordHash: string
+  role: $Enums.UserRole
+  isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  projectsAsClient?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
+  projectsAsCreative?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreativeInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutClientInput
+  bookingsAsClient?: Prisma.BookingUncheckedCreateNestedManyWithoutClientInput
+  bookingsAsCreative?: Prisma.BookingUncheckedCreateNestedManyWithoutCreativeInput
+  eoiSubmissions?: Prisma.EoiSubmissionUncheckedCreateNestedManyWithoutCollaboratorInput
+  businessListings?: Prisma.BusinessListingUncheckedCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
+  portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+}
+
+export type UserCreateOrConnectWithoutReviewedCollaboratorApplicationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutReviewedCollaboratorApplicationsInput>
+}
+
+export type UserUpsertWithoutCollaboratorApplicationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCollaboratorApplicationsInput, Prisma.UserUncheckedUpdateWithoutCollaboratorApplicationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutCollaboratorApplicationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCollaboratorApplicationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCollaboratorApplicationsInput, Prisma.UserUncheckedUpdateWithoutCollaboratorApplicationsInput>
+}
+
+export type UserUpdateWithoutCollaboratorApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  projectsAsClient?: Prisma.ProjectUpdateManyWithoutClientNestedInput
+  projectsAsCreative?: Prisma.ProjectUpdateManyWithoutCreativeNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutClientNestedInput
+  bookingsAsClient?: Prisma.BookingUpdateManyWithoutClientNestedInput
+  bookingsAsCreative?: Prisma.BookingUpdateManyWithoutCreativeNestedInput
+  eoiSubmissions?: Prisma.EoiSubmissionUpdateManyWithoutCollaboratorNestedInput
+  businessListings?: Prisma.BusinessListingUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
+  portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCollaboratorApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  projectsAsClient?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
+  projectsAsCreative?: Prisma.ProjectUncheckedUpdateManyWithoutCreativeNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutClientNestedInput
+  bookingsAsClient?: Prisma.BookingUncheckedUpdateManyWithoutClientNestedInput
+  bookingsAsCreative?: Prisma.BookingUncheckedUpdateManyWithoutCreativeNestedInput
+  eoiSubmissions?: Prisma.EoiSubmissionUncheckedUpdateManyWithoutCollaboratorNestedInput
+  businessListings?: Prisma.BusinessListingUncheckedUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
+  portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+}
+
+export type UserUpsertWithoutReviewedCollaboratorApplicationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedCollaboratorApplicationsInput, Prisma.UserUncheckedUpdateWithoutReviewedCollaboratorApplicationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedCollaboratorApplicationsInput, Prisma.UserUncheckedCreateWithoutReviewedCollaboratorApplicationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewedCollaboratorApplicationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedCollaboratorApplicationsInput, Prisma.UserUncheckedUpdateWithoutReviewedCollaboratorApplicationsInput>
+}
+
+export type UserUpdateWithoutReviewedCollaboratorApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  projectsAsClient?: Prisma.ProjectUpdateManyWithoutClientNestedInput
+  projectsAsCreative?: Prisma.ProjectUpdateManyWithoutCreativeNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutClientNestedInput
+  bookingsAsClient?: Prisma.BookingUpdateManyWithoutClientNestedInput
+  bookingsAsCreative?: Prisma.BookingUpdateManyWithoutCreativeNestedInput
+  eoiSubmissions?: Prisma.EoiSubmissionUpdateManyWithoutCollaboratorNestedInput
+  businessListings?: Prisma.BusinessListingUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
+  portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewedCollaboratorApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  projectsAsClient?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
+  projectsAsCreative?: Prisma.ProjectUncheckedUpdateManyWithoutCreativeNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutClientNestedInput
+  bookingsAsClient?: Prisma.BookingUncheckedUpdateManyWithoutClientNestedInput
+  bookingsAsCreative?: Prisma.BookingUncheckedUpdateManyWithoutCreativeNestedInput
+  eoiSubmissions?: Prisma.EoiSubmissionUncheckedUpdateManyWithoutCollaboratorNestedInput
+  businessListings?: Prisma.BusinessListingUncheckedUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
+  portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1388,6 +2004,10 @@ export type UserCreateWithoutAuditLogsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1401,6 +2021,8 @@ export type UserCreateWithoutAuditLogsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1410,6 +2032,10 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1423,6 +2049,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1448,6 +2076,10 @@ export type UserUpdateWithoutAuditLogsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1461,6 +2093,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1470,6 +2104,10 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1483,6 +2121,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutBusinessListingsInput = {
@@ -1492,6 +2132,10 @@ export type UserCreateWithoutBusinessListingsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1505,6 +2149,8 @@ export type UserCreateWithoutBusinessListingsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutBusinessListingsInput = {
@@ -1514,6 +2160,10 @@ export type UserUncheckedCreateWithoutBusinessListingsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1527,6 +2177,8 @@ export type UserUncheckedCreateWithoutBusinessListingsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutBusinessListingsInput = {
@@ -1552,6 +2204,10 @@ export type UserUpdateWithoutBusinessListingsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1565,6 +2221,8 @@ export type UserUpdateWithoutBusinessListingsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBusinessListingsInput = {
@@ -1574,6 +2232,10 @@ export type UserUncheckedUpdateWithoutBusinessListingsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1587,6 +2249,8 @@ export type UserUncheckedUpdateWithoutBusinessListingsInput = {
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutCreativeProfilePageInput = {
@@ -1596,6 +2260,10 @@ export type UserCreateWithoutCreativeProfilePageInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1609,6 +2277,8 @@ export type UserCreateWithoutCreativeProfilePageInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutCreativeProfilePageInput = {
@@ -1618,6 +2288,10 @@ export type UserUncheckedCreateWithoutCreativeProfilePageInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1631,6 +2305,8 @@ export type UserUncheckedCreateWithoutCreativeProfilePageInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutCreativeProfilePageInput = {
@@ -1656,6 +2332,10 @@ export type UserUpdateWithoutCreativeProfilePageInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1669,6 +2349,8 @@ export type UserUpdateWithoutCreativeProfilePageInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreativeProfilePageInput = {
@@ -1678,6 +2360,10 @@ export type UserUncheckedUpdateWithoutCreativeProfilePageInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1691,6 +2377,8 @@ export type UserUncheckedUpdateWithoutCreativeProfilePageInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutPortfolioItemsInput = {
@@ -1700,6 +2388,10 @@ export type UserCreateWithoutPortfolioItemsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1713,6 +2405,8 @@ export type UserCreateWithoutPortfolioItemsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutPortfolioItemsInput = {
@@ -1722,6 +2416,10 @@ export type UserUncheckedCreateWithoutPortfolioItemsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1735,6 +2433,8 @@ export type UserUncheckedCreateWithoutPortfolioItemsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   campaignRooms?: Prisma.CampaignRoomUncheckedCreateNestedManyWithoutCollaboratorInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutPortfolioItemsInput = {
@@ -1760,6 +2460,10 @@ export type UserUpdateWithoutPortfolioItemsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1773,6 +2477,8 @@ export type UserUpdateWithoutPortfolioItemsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -1782,6 +2488,10 @@ export type UserUncheckedUpdateWithoutPortfolioItemsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1795,6 +2505,8 @@ export type UserUncheckedUpdateWithoutPortfolioItemsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   campaignRooms?: Prisma.CampaignRoomUncheckedUpdateManyWithoutCollaboratorNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserCreateWithoutCampaignRoomsInput = {
@@ -1804,6 +2516,10 @@ export type UserCreateWithoutCampaignRoomsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
@@ -1817,6 +2533,8 @@ export type UserCreateWithoutCampaignRoomsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemCreateNestedManyWithoutCreativeInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserUncheckedCreateWithoutCampaignRoomsInput = {
@@ -1826,6 +2544,10 @@ export type UserUncheckedCreateWithoutCampaignRoomsInput = {
   passwordHash: string
   role: $Enums.UserRole
   isActive?: boolean
+  emailVerifiedAt?: Date | string | null
+  onboardingCompletedAt?: Date | string | null
+  approvalStatus?: $Enums.AccountApprovalStatus
+  authSessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1839,6 +2561,8 @@ export type UserUncheckedCreateWithoutCampaignRoomsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedCreateNestedOneWithoutCreativeInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedCreateNestedManyWithoutCreativeInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutCollaboratorInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
 }
 
 export type UserCreateOrConnectWithoutCampaignRoomsInput = {
@@ -1864,6 +2588,10 @@ export type UserUpdateWithoutCampaignRoomsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
@@ -1877,6 +2605,8 @@ export type UserUpdateWithoutCampaignRoomsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUpdateManyWithoutCreativeNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUpdateManyWithoutReviewedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCampaignRoomsInput = {
@@ -1886,6 +2616,10 @@ export type UserUncheckedUpdateWithoutCampaignRoomsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvalStatus?: Prisma.EnumAccountApprovalStatusFieldUpdateOperationsInput | $Enums.AccountApprovalStatus
+  authSessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1899,6 +2633,8 @@ export type UserUncheckedUpdateWithoutCampaignRoomsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   creativeProfilePage?: Prisma.CreativeProfilePageUncheckedUpdateOneWithoutCreativeNestedInput
   portfolioItems?: Prisma.CreativePortfolioItemUncheckedUpdateManyWithoutCreativeNestedInput
+  collaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutCollaboratorNestedInput
+  reviewedCollaboratorApplications?: Prisma.CollaboratorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
 }
 
 
@@ -1917,6 +2653,8 @@ export type UserCountOutputType = {
   auditLogs: number
   portfolioItems: number
   campaignRooms: number
+  collaboratorApplications: number
+  reviewedCollaboratorApplications: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1930,6 +2668,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   portfolioItems?: boolean | UserCountOutputTypeCountPortfolioItemsArgs
   campaignRooms?: boolean | UserCountOutputTypeCountCampaignRoomsArgs
+  collaboratorApplications?: boolean | UserCountOutputTypeCountCollaboratorApplicationsArgs
+  reviewedCollaboratorApplications?: boolean | UserCountOutputTypeCountReviewedCollaboratorApplicationsArgs
 }
 
 /**
@@ -2012,6 +2752,20 @@ export type UserCountOutputTypeCountCampaignRoomsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.CampaignRoomWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCollaboratorApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CollaboratorApplicationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewedCollaboratorApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CollaboratorApplicationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2020,6 +2774,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   passwordHash?: boolean
   role?: boolean
   isActive?: boolean
+  emailVerifiedAt?: boolean
+  onboardingCompletedAt?: boolean
+  approvalStatus?: boolean
+  authSessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   profile?: boolean | Prisma.User$profileArgs<ExtArgs>
@@ -2034,6 +2792,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   creativeProfilePage?: boolean | Prisma.User$creativeProfilePageArgs<ExtArgs>
   portfolioItems?: boolean | Prisma.User$portfolioItemsArgs<ExtArgs>
   campaignRooms?: boolean | Prisma.User$campaignRoomsArgs<ExtArgs>
+  collaboratorApplications?: boolean | Prisma.User$collaboratorApplicationsArgs<ExtArgs>
+  reviewedCollaboratorApplications?: boolean | Prisma.User$reviewedCollaboratorApplicationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2044,6 +2804,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   role?: boolean
   isActive?: boolean
+  emailVerifiedAt?: boolean
+  onboardingCompletedAt?: boolean
+  approvalStatus?: boolean
+  authSessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -2055,6 +2819,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   role?: boolean
   isActive?: boolean
+  emailVerifiedAt?: boolean
+  onboardingCompletedAt?: boolean
+  approvalStatus?: boolean
+  authSessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -2066,11 +2834,15 @@ export type UserSelectScalar = {
   passwordHash?: boolean
   role?: boolean
   isActive?: boolean
+  emailVerifiedAt?: boolean
+  onboardingCompletedAt?: boolean
+  approvalStatus?: boolean
+  authSessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "normalizedEmail" | "passwordHash" | "role" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "normalizedEmail" | "passwordHash" | "role" | "isActive" | "emailVerifiedAt" | "onboardingCompletedAt" | "approvalStatus" | "authSessionVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profile?: boolean | Prisma.User$profileArgs<ExtArgs>
   projectsAsClient?: boolean | Prisma.User$projectsAsClientArgs<ExtArgs>
@@ -2084,6 +2856,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   creativeProfilePage?: boolean | Prisma.User$creativeProfilePageArgs<ExtArgs>
   portfolioItems?: boolean | Prisma.User$portfolioItemsArgs<ExtArgs>
   campaignRooms?: boolean | Prisma.User$campaignRoomsArgs<ExtArgs>
+  collaboratorApplications?: boolean | Prisma.User$collaboratorApplicationsArgs<ExtArgs>
+  reviewedCollaboratorApplications?: boolean | Prisma.User$reviewedCollaboratorApplicationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2104,6 +2878,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     creativeProfilePage: Prisma.$CreativeProfilePagePayload<ExtArgs> | null
     portfolioItems: Prisma.$CreativePortfolioItemPayload<ExtArgs>[]
     campaignRooms: Prisma.$CampaignRoomPayload<ExtArgs>[]
+    collaboratorApplications: Prisma.$CollaboratorApplicationPayload<ExtArgs>[]
+    reviewedCollaboratorApplications: Prisma.$CollaboratorApplicationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2112,6 +2888,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     passwordHash: string
     role: $Enums.UserRole
     isActive: boolean
+    emailVerifiedAt: Date | null
+    onboardingCompletedAt: Date | null
+    approvalStatus: $Enums.AccountApprovalStatus
+    authSessionVersion: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -2520,6 +3300,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   creativeProfilePage<T extends Prisma.User$creativeProfilePageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$creativeProfilePageArgs<ExtArgs>>): Prisma.Prisma__CreativeProfilePageClient<runtime.Types.Result.GetResult<Prisma.$CreativeProfilePagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   portfolioItems<T extends Prisma.User$portfolioItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$portfolioItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreativePortfolioItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   campaignRooms<T extends Prisma.User$campaignRoomsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campaignRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  collaboratorApplications<T extends Prisma.User$collaboratorApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$collaboratorApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollaboratorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedCollaboratorApplications<T extends Prisma.User$reviewedCollaboratorApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedCollaboratorApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollaboratorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2555,6 +3337,10 @@ export interface UserFieldRefs {
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
+  readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly onboardingCompletedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly approvalStatus: Prisma.FieldRef<"User", 'AccountApprovalStatus'>
+  readonly authSessionVersion: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -3225,6 +4011,54 @@ export type User$campaignRoomsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.CampaignRoomScalarFieldEnum | Prisma.CampaignRoomScalarFieldEnum[]
+}
+
+/**
+ * User.collaboratorApplications
+ */
+export type User$collaboratorApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CollaboratorApplication
+   */
+  select?: Prisma.CollaboratorApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CollaboratorApplication
+   */
+  omit?: Prisma.CollaboratorApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CollaboratorApplicationInclude<ExtArgs> | null
+  where?: Prisma.CollaboratorApplicationWhereInput
+  orderBy?: Prisma.CollaboratorApplicationOrderByWithRelationInput | Prisma.CollaboratorApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.CollaboratorApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CollaboratorApplicationScalarFieldEnum | Prisma.CollaboratorApplicationScalarFieldEnum[]
+}
+
+/**
+ * User.reviewedCollaboratorApplications
+ */
+export type User$reviewedCollaboratorApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CollaboratorApplication
+   */
+  select?: Prisma.CollaboratorApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CollaboratorApplication
+   */
+  omit?: Prisma.CollaboratorApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CollaboratorApplicationInclude<ExtArgs> | null
+  where?: Prisma.CollaboratorApplicationWhereInput
+  orderBy?: Prisma.CollaboratorApplicationOrderByWithRelationInput | Prisma.CollaboratorApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.CollaboratorApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CollaboratorApplicationScalarFieldEnum | Prisma.CollaboratorApplicationScalarFieldEnum[]
 }
 
 /**

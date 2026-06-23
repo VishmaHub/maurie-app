@@ -1,4 +1,4 @@
-import { scryptSync, timingSafeEqual } from "node:crypto";
+import { randomBytes, scrypt, scryptSync, timingSafeEqual } from "node:crypto";
 
 interface ParsedScryptHash {
   readonly cost: number;
@@ -6,6 +6,58 @@ interface ParsedScryptHash {
   readonly parallelization: number;
   readonly salt: Buffer;
   readonly hash: Buffer;
+}
+
+interface ScryptHashOptions {
+  readonly cost: number;
+  readonly blockSize: number;
+  readonly parallelization: number;
+  readonly keyLength: number;
+  readonly saltLength: number;
+  readonly maxMemoryBytes: number;
+}
+
+const SCRYPT_HASH_OPTIONS: ScryptHashOptions = {
+  cost: 131072,
+  blockSize: 8,
+  parallelization: 1,
+  keyLength: 64,
+  saltLength: 32,
+  maxMemoryBytes: 256 * 1024 * 1024
+};
+
+function derivePasswordKey(password: string, salt: Buffer): Promise<Buffer> {
+  return new Promise((resolve, reject): void => {
+    scrypt(
+      password,
+      salt,
+      SCRYPT_HASH_OPTIONS.keyLength,
+      {
+        N: SCRYPT_HASH_OPTIONS.cost,
+        r: SCRYPT_HASH_OPTIONS.blockSize,
+        p: SCRYPT_HASH_OPTIONS.parallelization,
+        maxmem: SCRYPT_HASH_OPTIONS.maxMemoryBytes
+      },
+      (error: Error | null, derivedKey: Buffer): void => {
+        if (error !== null) {
+          reject(error);
+          return;
+        }
+
+        resolve(derivedKey);
+      }
+    );
+  });
+}
+
+/** Creates a hash compatible with verifyPassword. Passwords are never normalised or trimmed. */
+export async function hashPassword(password: string): Promise<string> {
+  const salt: Buffer = randomBytes(SCRYPT_HASH_OPTIONS.saltLength);
+  const derivedKey: Buffer = await derivePasswordKey(password, salt);
+  const encodedSalt: string = salt.toString("base64url");
+  const encodedHash: string = derivedKey.toString("base64url");
+
+  return `scrypt$N=${SCRYPT_HASH_OPTIONS.cost},r=${SCRYPT_HASH_OPTIONS.blockSize},p=${SCRYPT_HASH_OPTIONS.parallelization}$${encodedSalt}$${encodedHash}`;
 }
 
 function parseScryptPasswordHash(passwordHash: string): ParsedScryptHash {

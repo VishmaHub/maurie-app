@@ -58,6 +58,7 @@ export const ModelName = {
   Invoice: 'Invoice',
   Booking: 'Booking',
   EoiSubmission: 'EoiSubmission',
+  CollaboratorApplication: 'CollaboratorApplication',
   AuditLog: 'AuditLog',
   BusinessListing: 'BusinessListing',
   ListingOffer: 'ListingOffer',
@@ -91,6 +92,10 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   role: 'role',
   isActive: 'isActive',
+  emailVerifiedAt: 'emailVerifiedAt',
+  onboardingCompletedAt: 'onboardingCompletedAt',
+  approvalStatus: 'approvalStatus',
+  authSessionVersion: 'authSessionVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -206,6 +211,25 @@ export const EoiSubmissionScalarFieldEnum = {
 } as const
 
 export type EoiSubmissionScalarFieldEnum = (typeof EoiSubmissionScalarFieldEnum)[keyof typeof EoiSubmissionScalarFieldEnum]
+
+
+export const CollaboratorApplicationScalarFieldEnum = {
+  id: 'id',
+  collaboratorId: 'collaboratorId',
+  organisationName: 'organisationName',
+  organisationType: 'organisationType',
+  contactName: 'contactName',
+  partnershipInterestSummary: 'partnershipInterestSummary',
+  status: 'status',
+  nonBindingAcknowledged: 'nonBindingAcknowledged',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  reviewNotes: 'reviewNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CollaboratorApplicationScalarFieldEnum = (typeof CollaboratorApplicationScalarFieldEnum)[keyof typeof CollaboratorApplicationScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {
@@ -364,6 +388,14 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -371,12 +403,4 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

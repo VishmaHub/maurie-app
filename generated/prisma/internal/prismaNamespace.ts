@@ -391,6 +391,7 @@ export const ModelName = {
   Invoice: 'Invoice',
   Booking: 'Booking',
   EoiSubmission: 'EoiSubmission',
+  CollaboratorApplication: 'CollaboratorApplication',
   AuditLog: 'AuditLog',
   BusinessListing: 'BusinessListing',
   ListingOffer: 'ListingOffer',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "project" | "projectMilestone" | "invoice" | "booking" | "eoiSubmission" | "auditLog" | "businessListing" | "listingOffer" | "creativeProfilePage" | "creativePortfolioItem" | "campaignRoom" | "campaignRoomAsset" | "platformSetting"
+    modelProps: "user" | "profile" | "project" | "projectMilestone" | "invoice" | "booking" | "eoiSubmission" | "collaboratorApplication" | "auditLog" | "businessListing" | "listingOffer" | "creativeProfilePage" | "creativePortfolioItem" | "campaignRoom" | "campaignRoomAsset" | "platformSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -933,6 +934,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.EoiSubmissionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.EoiSubmissionCountAggregateOutputType> | number
+        }
+      }
+    }
+    CollaboratorApplication: {
+      payload: Prisma.$CollaboratorApplicationPayload<ExtArgs>
+      fields: Prisma.CollaboratorApplicationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CollaboratorApplicationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CollaboratorApplicationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>
+        }
+        findFirst: {
+          args: Prisma.CollaboratorApplicationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CollaboratorApplicationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>
+        }
+        findMany: {
+          args: Prisma.CollaboratorApplicationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>[]
+        }
+        create: {
+          args: Prisma.CollaboratorApplicationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>
+        }
+        createMany: {
+          args: Prisma.CollaboratorApplicationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CollaboratorApplicationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>[]
+        }
+        delete: {
+          args: Prisma.CollaboratorApplicationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>
+        }
+        update: {
+          args: Prisma.CollaboratorApplicationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>
+        }
+        deleteMany: {
+          args: Prisma.CollaboratorApplicationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CollaboratorApplicationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CollaboratorApplicationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>[]
+        }
+        upsert: {
+          args: Prisma.CollaboratorApplicationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CollaboratorApplicationPayload>
+        }
+        aggregate: {
+          args: Prisma.CollaboratorApplicationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCollaboratorApplication>
+        }
+        groupBy: {
+          args: Prisma.CollaboratorApplicationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CollaboratorApplicationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CollaboratorApplicationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CollaboratorApplicationCountAggregateOutputType> | number
         }
       }
     }
@@ -1574,6 +1649,10 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   role: 'role',
   isActive: 'isActive',
+  emailVerifiedAt: 'emailVerifiedAt',
+  onboardingCompletedAt: 'onboardingCompletedAt',
+  approvalStatus: 'approvalStatus',
+  authSessionVersion: 'authSessionVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1689,6 +1768,25 @@ export const EoiSubmissionScalarFieldEnum = {
 } as const
 
 export type EoiSubmissionScalarFieldEnum = (typeof EoiSubmissionScalarFieldEnum)[keyof typeof EoiSubmissionScalarFieldEnum]
+
+
+export const CollaboratorApplicationScalarFieldEnum = {
+  id: 'id',
+  collaboratorId: 'collaboratorId',
+  organisationName: 'organisationName',
+  organisationType: 'organisationType',
+  contactName: 'contactName',
+  partnershipInterestSummary: 'partnershipInterestSummary',
+  status: 'status',
+  nonBindingAcknowledged: 'nonBindingAcknowledged',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  reviewNotes: 'reviewNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CollaboratorApplicationScalarFieldEnum = (typeof CollaboratorApplicationScalarFieldEnum)[keyof typeof CollaboratorApplicationScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {
@@ -1847,6 +1945,14 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -1854,14 +1960,6 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -1920,6 +2018,34 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'AccountApprovalStatus'
+ */
+export type EnumAccountApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountApprovalStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AccountApprovalStatus[]'
+ */
+export type ListEnumAccountApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountApprovalStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1944,20 +2070,6 @@ export type EnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'ProjectStatus[]'
  */
 export type ListEnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -2028,6 +2140,20 @@ export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Bytes[]'
  */
 export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CollaboratorApplicationStatus'
+ */
+export type EnumCollaboratorApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CollaboratorApplicationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CollaboratorApplicationStatus[]'
+ */
+export type ListEnumCollaboratorApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CollaboratorApplicationStatus[]'>
     
 
 
@@ -2175,6 +2301,7 @@ export type GlobalOmitConfig = {
   invoice?: Prisma.InvoiceOmit
   booking?: Prisma.BookingOmit
   eoiSubmission?: Prisma.EoiSubmissionOmit
+  collaboratorApplication?: Prisma.CollaboratorApplicationOmit
   auditLog?: Prisma.AuditLogOmit
   businessListing?: Prisma.BusinessListingOmit
   listingOffer?: Prisma.ListingOfferOmit

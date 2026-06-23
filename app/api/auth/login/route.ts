@@ -1,14 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import type { UserRole } from "@/generated/prisma/client";
+import { normaliseEmail } from "@/lib/auth/normalise-email";
 import { createSessionCookiePayload } from "@/lib/auth/session";
 import { verifyPassword } from "@/lib/auth/password";
 import { ROLE_DASHBOARD_PATHS } from "@/lib/navigation";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit/audit-log";
-
-function normaliseEmail(email: string): string {
-  return email.trim().toLowerCase();
-}
 
 function getFormFieldValue(formData: FormData, fieldName: string): string {
   const value: FormDataEntryValue | null = formData.get(fieldName);
@@ -48,7 +45,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const formData: FormData = await request.formData();
 
   const email: string = normaliseEmail(getFormFieldValue(formData, "email"));
-  const password: string = getFormFieldValue(formData, "password").trim();
+  const password: string = getFormFieldValue(formData, "password");
   const nextPath: string = getFormFieldValue(formData, "next");
 
   if (email.length === 0 || password.length === 0) {

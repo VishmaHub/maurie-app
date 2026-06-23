@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import { scryptSync, randomBytes } from "node:crypto";
 import { PrismaPg } from "@prisma/adapter-pg";
 import {
+  AccountApprovalStatus,
   BookingStatus,
   ComplianceStatus,
   PaymentStatus,
@@ -11,6 +11,8 @@ import {
   TaxStatus,
   UserRole
 } from "../generated/prisma/client";
+import { normaliseEmail } from "../lib/auth/normalise-email";
+import { hashPassword } from "../lib/auth/password";
 
 dotenv.config();
 
@@ -23,22 +25,6 @@ interface SeedUserInput {
   readonly bio: string;
 }
 
-interface ScryptHashOptions {
-  readonly cost: number;
-  readonly blockSize: number;
-  readonly parallelization: number;
-  readonly keyLength: number;
-  readonly maxMemoryBytes: number;
-}
-
-const scryptOptions: ScryptHashOptions = {
-  cost: 131072,
-  blockSize: 8,
-  parallelization: 1,
-  keyLength: 64,
-  maxMemoryBytes: 256 * 1024 * 1024
-};
-
 function getDatabaseUrl(): string {
   const databaseUrl: string | undefined = process.env.DATABASE_URL;
 
@@ -49,9 +35,6 @@ function getDatabaseUrl(): string {
   return databaseUrl;
 }
 
-function normaliseEmail(email: string): string {
-  return email.trim().toLowerCase();
-}
 function getCreativeVCardPayload(
   input: SeedUserInput
 ): Prisma.InputJsonValue | typeof Prisma.DbNull {
@@ -65,22 +48,6 @@ function getCreativeVCardPayload(
     title: "Creative Partner",
     company: "Mauri-E"
   };
-}
-
-function hashPassword(password: string): string {
-  const salt: Buffer = randomBytes(32);
-
-  const derivedKey: Buffer = scryptSync(password, salt, scryptOptions.keyLength, {
-    N: scryptOptions.cost,
-    r: scryptOptions.blockSize,
-    p: scryptOptions.parallelization,
-    maxmem: scryptOptions.maxMemoryBytes
-  });
-
-  const encodedSalt: string = salt.toString("base64url");
-  const encodedHash: string = derivedKey.toString("base64url");
-
-  return `scrypt$N=${scryptOptions.cost},r=${scryptOptions.blockSize},p=${scryptOptions.parallelization}$${encodedSalt}$${encodedHash}`;
 }
 
 const adapter: PrismaPg = new PrismaPg({
@@ -128,6 +95,8 @@ const seedUsers: readonly SeedUserInput[] = [
 
 async function seedUser(input: SeedUserInput) {
   const normalisedEmail: string = normaliseEmail(input.email);
+  const passwordHash: string = await hashPassword(input.password);
+  const seedAccountReadyAt = new Date("2026-01-01T00:00:00.000Z");
   const portfolioHeadline: string | null =
     input.role === UserRole.CREATIVE ? "Purpose-led creative profile" : null;
   const portfolioSummary: string | null =
@@ -142,9 +111,13 @@ async function seedUser(input: SeedUserInput) {
     update: {
       email: input.email,
       normalizedEmail: normalisedEmail,
-      passwordHash: hashPassword(input.password),
+      passwordHash,
       role: input.role,
       isActive: true,
+      emailVerifiedAt: seedAccountReadyAt,
+      onboardingCompletedAt: seedAccountReadyAt,
+      approvalStatus: AccountApprovalStatus.APPROVED,
+      authSessionVersion: 1,
       profile: {
         upsert: {
           create: {
@@ -171,9 +144,13 @@ async function seedUser(input: SeedUserInput) {
     create: {
       email: input.email,
       normalizedEmail: normalisedEmail,
-      passwordHash: hashPassword(input.password),
+      passwordHash,
       role: input.role,
       isActive: true,
+      emailVerifiedAt: seedAccountReadyAt,
+      onboardingCompletedAt: seedAccountReadyAt,
+      approvalStatus: AccountApprovalStatus.APPROVED,
+      authSessionVersion: 1,
       profile: {
         create: {
           publicSlug: input.publicSlug,

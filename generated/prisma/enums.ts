@@ -19,6 +19,24 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const AccountApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type AccountApprovalStatus = (typeof AccountApprovalStatus)[keyof typeof AccountApprovalStatus]
+
+
+export const CollaboratorApplicationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type CollaboratorApplicationStatus = (typeof CollaboratorApplicationStatus)[keyof typeof CollaboratorApplicationStatus]
+
+
 export const ProjectStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
