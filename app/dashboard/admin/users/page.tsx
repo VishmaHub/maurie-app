@@ -5,6 +5,55 @@ import { writeAuditLog } from "@/lib/audit/audit-log";
 import { getAdminUsers } from "@/lib/admin-users";
 import { requireRole } from "@/lib/auth/require-role";
 import { formatDate } from "@/lib/formatters";
+import { UserStatusControl } from "@/components/admin/user-status-control";
+
+interface AdminUsersPageProps {
+  readonly searchParams: Promise<{
+    readonly status?: string;
+  }>;
+}
+
+interface UserStatusNotice {
+  readonly title: string;
+  readonly description: string;
+  readonly tone: "yellow" | "orange" | "neutral";
+}
+
+function getUserStatusNotice(status: string | undefined): UserStatusNotice | null {
+  if (status === "updated") {
+    return {
+      title: "User status updated.",
+      description: "The user account status was updated successfully.",
+      tone: "yellow"
+    };
+  }
+
+  if (status === "self-lock-blocked") {
+    return {
+      title: "Action blocked.",
+      description: "You cannot deactivate your own admin account.",
+      tone: "orange"
+    };
+  }
+
+  if (status === "invalid") {
+    return {
+      title: "Invalid request.",
+      description: "The submitted user status request was invalid.",
+      tone: "orange"
+    };
+  }
+
+  if (status === "not-found") {
+    return {
+      title: "User not found.",
+      description: "The requested user account could not be found.",
+      tone: "orange"
+    };
+  }
+
+  return null;
+}
 
 function getRoleTone(role: string): "yellow" | "orange" | "neutral" {
   if (role === "ADMIN") {
@@ -18,8 +67,11 @@ function getRoleTone(role: string): "yellow" | "orange" | "neutral" {
   return "neutral";
 }
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage(props: AdminUsersPageProps) {
   const session = await requireRole("ADMIN");
+
+  const searchParams = await props.searchParams;
+  const notice = getUserStatusNotice(searchParams.status);
 
   await writeAuditLog({
     actorId: session.userId,
@@ -53,6 +105,24 @@ export default async function AdminUsersPage() {
             records from an admin-only workspace.
           </p>
         </div>
+
+        {notice === null ? null : (
+          <section className="maurie-glass-soft mt-8 rounded-3xl p-5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight text-[var(--maurie-text)]">
+                  {notice.title}
+                </h2>
+
+                <p className="mt-2 text-sm leading-6 text-[var(--maurie-muted)]">
+                  {notice.description}
+                </p>
+              </div>
+
+              <StatusBadge label={searchParams.status ?? "STATUS"} tone={notice.tone} />
+            </div>
+          </section>
+        )}
 
         <Link href="/dashboard/admin" className="maurie-button-secondary">
           Back to Admin
@@ -131,6 +201,12 @@ export default async function AdminUsersPage() {
                   <StatusBadge
                     label={user.isActive ? "ACTIVE" : "INACTIVE"}
                     tone={user.isActive ? "yellow" : "neutral"}
+                  />
+                  <UserStatusControl
+                    userId={user.id}
+                    isActive={user.isActive}
+                    isSelf={user.id === session.userId}
+                    returnPath="/dashboard/admin/users"
                   />
                 </div>
               </div>

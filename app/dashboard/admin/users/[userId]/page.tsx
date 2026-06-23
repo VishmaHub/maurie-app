@@ -6,16 +6,62 @@ import { writeAuditLog } from "@/lib/audit/audit-log";
 import { getAdminUserDetail } from "@/lib/admin-users";
 import { requireRole } from "@/lib/auth/require-role";
 import { formatDateTime } from "@/lib/formatters";
+import { UserStatusControl } from "@/components/admin/user-status-control";
 
 interface AdminUserDetailPageProps {
   readonly params: Promise<{
     readonly userId: string;
+  }>;
+  readonly searchParams: Promise<{
+    readonly status?: string;
   }>;
 }
 
 interface CountCardProps {
   readonly label: string;
   readonly value: number;
+}
+
+interface UserStatusNotice {
+  readonly title: string;
+  readonly description: string;
+  readonly tone: "yellow" | "orange" | "neutral";
+}
+
+function getUserStatusNotice(status: string | undefined): UserStatusNotice | null {
+  if (status === "updated") {
+    return {
+      title: "User status updated.",
+      description: "The user account status was updated successfully.",
+      tone: "yellow"
+    };
+  }
+
+  if (status === "self-lock-blocked") {
+    return {
+      title: "Action blocked.",
+      description: "You cannot deactivate your own admin account.",
+      tone: "orange"
+    };
+  }
+
+  if (status === "invalid") {
+    return {
+      title: "Invalid request.",
+      description: "The submitted user status request was invalid.",
+      tone: "orange"
+    };
+  }
+
+  if (status === "not-found") {
+    return {
+      title: "User not found.",
+      description: "The requested user account could not be found.",
+      tone: "orange"
+    };
+  }
+
+  return null;
 }
 
 function CountCard(props: CountCardProps) {
@@ -42,6 +88,9 @@ function getRoleTone(role: string): "yellow" | "orange" | "neutral" {
 export default async function AdminUserDetailPage(props: AdminUserDetailPageProps) {
   const session = await requireRole("ADMIN");
   const params = await props.params;
+
+  const searchParams = await props.searchParams;
+  const notice = getUserStatusNotice(searchParams.status);
 
   const user = await getAdminUserDetail(params.userId);
 
@@ -96,6 +145,53 @@ export default async function AdminUserDetailPage(props: AdminUserDetailPageProp
           />
         </div>
       </div>
+
+      <section className="maurie-glass-soft mt-8 rounded-3xl p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight text-[var(--maurie-text)]">
+              User Status Control
+            </h2>
+
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--maurie-muted)]">
+              Activate or deactivate this user account. Deactivated users remain in the database for
+              audit and historical reporting.
+            </p>
+          </div>
+
+          <StatusBadge
+            label={user.isActive ? "ACTIVE" : "INACTIVE"}
+            tone={user.isActive ? "yellow" : "neutral"}
+          />
+        </div>
+
+        <div className="mt-5">
+          <UserStatusControl
+            userId={user.id}
+            isActive={user.isActive}
+            isSelf={user.id === session.userId}
+            returnPath={`/dashboard/admin/users/${user.id}`}
+          />
+        </div>
+      </section>
+
+      {notice === null ? null : (
+        <section className="maurie-glass-soft mt-8 rounded-3xl p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold tracking-tight text-[var(--maurie-text)]">
+                {notice.title}
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-[var(--maurie-muted)]">
+                {notice.description}
+              </p>
+            </div>
+
+            <StatusBadge label={searchParams.status ?? "STATUS"} tone={notice.tone} />
+          </div>
+        </section>
+      )}
 
       <section className="mt-8 grid gap-4 md:grid-cols-4">
         <div className="maurie-glass-soft rounded-3xl p-5">

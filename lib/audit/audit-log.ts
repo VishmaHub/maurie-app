@@ -12,7 +12,8 @@ export type AuditAction =
   | "CREATIVE_DATA_READ"
   | "COLLABORATOR_DATA_READ"
   | "ADMIN_DATA_READ"
-  | "ADMIN_SETTING_UPDATE";
+  | "ADMIN_SETTING_UPDATE"
+  | "ADMIN_USER_STATUS_UPDATE";
 
 type AuditMetadataValue = string | number | boolean | null;
 
