@@ -1,3 +1,33 @@
+
+
+/**
+ * Admin Operational Dashboard Page
+ *
+ * Route:
+ * /dashboard/admin
+ *
+ * Purpose:
+ * This is the main admin command centre for Mauri-E.
+ * It gives internal admin users a high-level operational view of the platform.
+ *
+ * Access:
+ * Only authenticated users with the ADMIN role can access this page.
+ *
+ * Main responsibilities:
+ * - Verify admin access using requireRole("ADMIN")
+ * - Write an admin dashboard audit log
+ * - Load platform-wide operational metrics
+ * - Display user, project, invoice, booking, listing, campaign, EOI, and audit summaries
+ * - Provide quick navigation into major admin modules
+ * - Show recent operational activity for handover and monitoring
+ */
+/**
+ * Core Next.js and application imports.
+ *
+ * Link is used for internal navigation between admin modules.
+ * AppShell provides the authenticated dashboard layout.
+ * StatusBadge provides consistent status labels across the admin UI.
+ */
 import Link from "next/link";
 import { AppShell } from "@/components/layout/app-shell";
 import { StatusBadge } from "@/components/ui/status-badge";
