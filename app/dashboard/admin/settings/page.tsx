@@ -146,7 +146,7 @@ function SettingEditForm(props: { readonly setting: AdminPlatformSetting }) {
   return (
     <form action={updatePlatformSettingAction} className="mt-4 grid gap-3 md:grid-cols-[1fr_auto]">
       <input type="hidden" name="settingId" value={props.setting.id} />
-
+      <input type="hidden" name="returnPath" value="/dashboard/admin/settings" />
       <label className="grid gap-2">
         <span className="text-xs font-semibold text-[var(--maurie-muted)]">Value</span>
         {renderSettingInput(props.setting)}
@@ -302,6 +302,13 @@ export default async function AdminSettingsPage(props: AdminSettingsPageProps) {
                     </div>
 
                     <div className="flex flex-col gap-2 sm:flex-row">
+                      <Link
+                        href={`/dashboard/admin/settings/${setting.id}`}
+                        className="maurie-button-secondary"
+                      >
+                        View Detail
+                      </Link>
+
                       <StatusBadge
                         label={setting.valueType}
                         tone={getValueTone(setting.valueType)}

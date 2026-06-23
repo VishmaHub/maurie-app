@@ -16,12 +16,31 @@ function getFormString(formData: FormData, key: string): string | null {
   return value;
 }
 
-function getSettingsRedirectUrl(status: string, key?: string): string {
-  if (typeof key === "string" && key.length > 0) {
-    return `/dashboard/admin/settings?status=${status}&key=${encodeURIComponent(key)}`;
+function getSafeReturnPath(formData: FormData): string {
+  const returnPath = getFormString(formData, "returnPath");
+
+  if (returnPath === null) {
+    return "/dashboard/admin/settings";
   }
 
-  return `/dashboard/admin/settings?status=${status}`;
+  if (!returnPath.startsWith("/dashboard/admin/settings")) {
+    return "/dashboard/admin/settings";
+  }
+
+  return returnPath;
+}
+
+function getSettingsRedirectUrl(status: string, key?: string, returnPath?: string): string {
+  const targetPath = returnPath ?? "/dashboard/admin/settings";
+  const searchParams = new URLSearchParams();
+
+  searchParams.set("status", status);
+
+  if (typeof key === "string" && key.length > 0) {
+    searchParams.set("key", key);
+  }
+
+  return `${targetPath}?${searchParams.toString()}`;
 }
 
 function normaliseSettingValue(valueType: string, rawValue: string): string | null {
@@ -75,9 +94,10 @@ export async function updatePlatformSettingAction(formData: FormData): Promise<v
 
   const settingId = getFormString(formData, "settingId");
   const rawValue = getFormString(formData, "value");
+  const returnPath = getSafeReturnPath(formData);
 
   if (settingId === null || rawValue === null) {
-    redirect(getSettingsRedirectUrl("invalid"));
+    redirect(getSettingsRedirectUrl("invalid", undefined, returnPath));
   }
 
   const setting = await prisma.platformSetting.findUnique({
@@ -94,17 +114,17 @@ export async function updatePlatformSettingAction(formData: FormData): Promise<v
   });
 
   if (setting === null) {
-    redirect(getSettingsRedirectUrl("not-found"));
+    redirect(getSettingsRedirectUrl("not-found", undefined, returnPath));
   }
 
   if (setting.isSensitive) {
-    redirect(getSettingsRedirectUrl("locked", setting.key));
+    redirect(getSettingsRedirectUrl("locked", setting.key, returnPath));
   }
 
   const nextValue = normaliseSettingValue(setting.valueType, rawValue);
 
   if (nextValue === null) {
-    redirect(getSettingsRedirectUrl("invalid", setting.key));
+    redirect(getSettingsRedirectUrl("invalid", setting.key, returnPath));
   }
 
   await prisma.platformSetting.update({
@@ -129,6 +149,7 @@ export async function updatePlatformSettingAction(formData: FormData): Promise<v
   });
 
   revalidatePath("/dashboard/admin/settings");
+  revalidatePath(returnPath);
 
-  redirect(getSettingsRedirectUrl("updated", setting.key));
+  redirect(getSettingsRedirectUrl("updated", setting.key, returnPath));
 }
