@@ -8,7 +8,9 @@ import { hashPassword } from "@/lib/auth/password";
 import { createSessionCookie } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 import {
+  businessRegistrationSchema,
   creatorRegistrationSchema,
+  type BusinessRegistrationInput,
   type CreatorRegistrationInput
 } from "@/lib/validation/register";
 
@@ -22,14 +24,36 @@ export interface CreatorRegistrationFieldErrors {
   readonly consentAccepted: readonly string[];
 }
 
+export interface BusinessRegistrationFieldErrors {
+  readonly contactName: readonly string[];
+  readonly businessName: readonly string[];
+  readonly email: readonly string[];
+  readonly password: readonly string[];
+  readonly confirmPassword: readonly string[];
+  readonly businessSlug: readonly string[];
+  readonly websiteUrl: readonly string[];
+  readonly phone: readonly string[];
+  readonly consentAccepted: readonly string[];
+}
+
 export interface CreatorRegistrationActionState {
   readonly status: "idle" | "error";
   readonly message: string;
   readonly fieldErrors: CreatorRegistrationFieldErrors;
 }
 
+export interface BusinessRegistrationActionState {
+  readonly status: "idle" | "error";
+  readonly message: string;
+  readonly fieldErrors: BusinessRegistrationFieldErrors;
+}
+
 type CreatorRegistrationSchemaFieldErrors = Partial<
   Record<keyof CreatorRegistrationFieldErrors, string[]>
+>;
+
+type BusinessRegistrationSchemaFieldErrors = Partial<
+  Record<keyof BusinessRegistrationFieldErrors, string[]>
 >;
 
 const emptyCreatorRegistrationFieldErrors: CreatorRegistrationFieldErrors = {
@@ -39,6 +63,18 @@ const emptyCreatorRegistrationFieldErrors: CreatorRegistrationFieldErrors = {
   confirmPassword: [],
   publicHandle: [],
   locationLabel: [],
+  consentAccepted: []
+};
+
+const emptyBusinessRegistrationFieldErrors: BusinessRegistrationFieldErrors = {
+  contactName: [],
+  businessName: [],
+  email: [],
+  password: [],
+  confirmPassword: [],
+  businessSlug: [],
+  websiteUrl: [],
+  phone: [],
   consentAccepted: []
 };
 
@@ -76,11 +112,31 @@ function getCreatorRegistrationFieldErrors(
   };
 }
 
+function getBusinessRegistrationFieldErrors(
+  fieldErrors: BusinessRegistrationSchemaFieldErrors
+): BusinessRegistrationFieldErrors {
+  return {
+    contactName: fieldErrors.contactName ?? [],
+    businessName: fieldErrors.businessName ?? [],
+    email: fieldErrors.email ?? [],
+    password: fieldErrors.password ?? [],
+    confirmPassword: fieldErrors.confirmPassword ?? [],
+    businessSlug: fieldErrors.businessSlug ?? [],
+    websiteUrl: fieldErrors.websiteUrl ?? [],
+    phone: fieldErrors.phone ?? [],
+    consentAccepted: fieldErrors.consentAccepted ?? []
+  };
+}
+
 function hasCreatorRegistrationFieldErrors(fieldErrors: CreatorRegistrationFieldErrors): boolean {
   return Object.values(fieldErrors).some((errors): boolean => errors.length > 0);
 }
 
-function createErrorState(
+function hasBusinessRegistrationFieldErrors(fieldErrors: BusinessRegistrationFieldErrors): boolean {
+  return Object.values(fieldErrors).some((errors): boolean => errors.length > 0);
+}
+
+function createCreatorErrorState(
   message: string,
   fieldErrors: Partial<Record<keyof CreatorRegistrationFieldErrors, readonly string[]>>
 ): CreatorRegistrationActionState {
@@ -94,6 +150,27 @@ function createErrorState(
       confirmPassword: fieldErrors.confirmPassword ?? [],
       publicHandle: fieldErrors.publicHandle ?? [],
       locationLabel: fieldErrors.locationLabel ?? [],
+      consentAccepted: fieldErrors.consentAccepted ?? []
+    }
+  };
+}
+
+function createBusinessErrorState(
+  message: string,
+  fieldErrors: Partial<Record<keyof BusinessRegistrationFieldErrors, readonly string[]>>
+): BusinessRegistrationActionState {
+  return {
+    status: "error",
+    message,
+    fieldErrors: {
+      contactName: fieldErrors.contactName ?? [],
+      businessName: fieldErrors.businessName ?? [],
+      email: fieldErrors.email ?? [],
+      password: fieldErrors.password ?? [],
+      confirmPassword: fieldErrors.confirmPassword ?? [],
+      businessSlug: fieldErrors.businessSlug ?? [],
+      websiteUrl: fieldErrors.websiteUrl ?? [],
+      phone: fieldErrors.phone ?? [],
       consentAccepted: fieldErrors.consentAccepted ?? []
     }
   };
@@ -149,6 +226,46 @@ async function getCreatorUniquenessErrors(
   };
 }
 
+async function getBusinessUniquenessErrors(
+  input: BusinessRegistrationInput
+): Promise<BusinessRegistrationFieldErrors> {
+  const [existingUser, existingProfile, existingListing] = await Promise.all([
+    prisma.user.findUnique({
+      where: {
+        normalizedEmail: input.email
+      },
+      select: {
+        id: true
+      }
+    }),
+    prisma.profile.findUnique({
+      where: {
+        publicSlug: input.businessSlug
+      },
+      select: {
+        id: true
+      }
+    }),
+    prisma.businessListing.findUnique({
+      where: {
+        publicSlug: input.businessSlug
+      },
+      select: {
+        id: true
+      }
+    })
+  ]);
+
+  return {
+    ...emptyBusinessRegistrationFieldErrors,
+    email: existingUser === null ? [] : ["An account with this email already exists."],
+    businessSlug:
+      existingProfile === null && existingListing === null
+        ? []
+        : ["This business listing slug is already taken."]
+  };
+}
+
 export async function registerCreatorAction(
   _previousState: CreatorRegistrationActionState,
   formData: FormData
@@ -164,7 +281,7 @@ export async function registerCreatorAction(
   });
 
   if (!parsedInput.success) {
-    return createErrorState(
+    return createCreatorErrorState(
       "Please review the highlighted fields.",
       getCreatorRegistrationFieldErrors(parsedInput.error.flatten().fieldErrors)
     );
@@ -174,7 +291,7 @@ export async function registerCreatorAction(
   const uniquenessErrors = await getCreatorUniquenessErrors(input);
 
   if (hasCreatorRegistrationFieldErrors(uniquenessErrors)) {
-    return createErrorState("Please review the highlighted fields.", uniquenessErrors);
+    return createCreatorErrorState("Please review the highlighted fields.", uniquenessErrors);
   }
 
   const passwordHash = await hashPassword(input.password);
@@ -242,13 +359,13 @@ export async function registerCreatorAction(
     });
   } catch (error: unknown) {
     if (hasPrismaErrorCode(error, "P2002")) {
-      return createErrorState("This email or public handle is already in use.", {
+      return createCreatorErrorState("This email or public handle is already in use.", {
         email: ["This email may already be registered."],
         publicHandle: ["This public handle may already be taken."]
       });
     }
 
-    return createErrorState("We could not create your account. Please try again.", {});
+    return createCreatorErrorState("We could not create your account. Please try again.", {});
   }
 
   revalidatePath("/dashboard/admin/users");
@@ -261,4 +378,130 @@ export async function registerCreatorAction(
   });
 
   redirect("/dashboard/creative");
+}
+
+export async function registerBusinessAction(
+  _previousState: BusinessRegistrationActionState,
+  formData: FormData
+): Promise<BusinessRegistrationActionState> {
+  const parsedInput = businessRegistrationSchema.safeParse({
+    contactName: getFormString(formData, "contactName"),
+    businessName: getFormString(formData, "businessName"),
+    email: getFormString(formData, "email"),
+    password: getFormString(formData, "password"),
+    confirmPassword: getFormString(formData, "confirmPassword"),
+    businessSlug: getFormString(formData, "businessSlug"),
+    websiteUrl: getOptionalFormString(formData, "websiteUrl"),
+    phone: getOptionalFormString(formData, "phone"),
+    consentAccepted: formData.get("consentAccepted")
+  });
+
+  if (!parsedInput.success) {
+    return createBusinessErrorState(
+      "Please review the highlighted fields.",
+      getBusinessRegistrationFieldErrors(parsedInput.error.flatten().fieldErrors)
+    );
+  }
+
+  const input = parsedInput.data;
+  const uniquenessErrors = await getBusinessUniquenessErrors(input);
+
+  if (hasBusinessRegistrationFieldErrors(uniquenessErrors)) {
+    return createBusinessErrorState("Please review the highlighted fields.", uniquenessErrors);
+  }
+
+  const passwordHash = await hashPassword(input.password);
+
+  let createdUser: {
+    readonly id: string;
+    readonly role: UserRole;
+  };
+
+  try {
+    createdUser = await prisma.$transaction(async (transaction) => {
+      const user = await transaction.user.create({
+        data: {
+          email: input.email,
+          normalizedEmail: input.email,
+          passwordHash,
+          role: UserRole.CLIENT,
+          isActive: true,
+          approvalStatus: AccountApprovalStatus.APPROVED
+        },
+        select: {
+          id: true,
+          role: true
+        }
+      });
+
+      await transaction.profile.create({
+        data: {
+          userId: user.id,
+          publicSlug: input.businessSlug,
+          displayName: input.contactName,
+          bio: `${input.businessName} business contact profile.`,
+          phoneE164: input.phone ?? null,
+          websiteUrl: input.websiteUrl ?? null,
+          isPublic: false
+        }
+      });
+
+      await transaction.businessListing.create({
+        data: {
+          clientId: user.id,
+          businessName: input.businessName,
+          publicSlug: input.businessSlug,
+          headline: "Business listing in progress",
+          description: "This business is preparing its Mauri-E listing.",
+          websiteUrl: input.websiteUrl ?? null,
+          contactEmail: input.email,
+          contactPhoneE164: input.phone ?? null,
+          seoTitle: input.businessName,
+          seoDescription: `Learn more about ${input.businessName} on Mauri-E.`,
+          isPublished: false
+        }
+      });
+
+      await writeAuditLog(
+        {
+          actorId: user.id,
+          action: "PUBLIC_REGISTRATION_CREATE",
+          resourceType: "User",
+          resourceId: user.id,
+          metadata: {
+            registrationType: "BUSINESS",
+            businessSlug: input.businessSlug
+          }
+        },
+        transaction
+      );
+
+      return user;
+    });
+  } catch (error: unknown) {
+    if (hasPrismaErrorCode(error, "P2002")) {
+      return createBusinessErrorState("This email or business slug is already in use.", {
+        email: ["This email may already be registered."],
+        businessSlug: ["This business listing slug may already be taken."]
+      });
+    }
+
+    return createBusinessErrorState(
+      "We could not create your business account. Please try again.",
+      {}
+    );
+  }
+
+  revalidatePath("/dashboard/admin/users");
+  revalidatePath("/dashboard/admin/clients");
+  revalidatePath("/dashboard/admin/listings");
+  revalidatePath("/dashboard/admin/audit-logs");
+  revalidatePath(`/l/${input.businessSlug}`);
+
+  await createSessionCookie({
+    userId: createdUser.id,
+    role: createdUser.role
+  });
+
+  redirect("/dashboard/client");
 }

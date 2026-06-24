@@ -70,7 +70,7 @@ export const businessRegistrationSchema = z
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: passwordSchema,
-    businessSlug: publicIdentifierSchema("Business slug", 140),
+    businessSlug: publicIdentifierSchema("Business slug", 120),
     websiteUrl: optionalUrlSchema(2048),
     phone: optionalPhoneSchema,
     consentAccepted: acceptedSchema("You must accept the terms and privacy notice.")

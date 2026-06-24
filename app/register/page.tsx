@@ -30,9 +30,9 @@ export default function RegisterPage() {
 
           <RegisterRoleCard
             title="Business"
-            description="Create a business account, manage your listing, and request Mauri-E services. This registration path is coming next."
-            label="Coming soon"
-            isDisabled
+            description="Create a business account, prepare your public listing, and request Mauri-E services from your client dashboard."
+            href="/register/business"
+            label="Available"
           />
 
           <RegisterRoleCard
