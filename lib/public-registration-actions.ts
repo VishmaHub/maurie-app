@@ -2,15 +2,21 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { AccountApprovalStatus, UserRole } from "@/generated/prisma/client";
+import {
+  AccountApprovalStatus,
+  CollaboratorApplicationStatus,
+  UserRole
+} from "@/generated/prisma/client";
 import { writeAuditLog } from "@/lib/audit/audit-log";
 import { hashPassword } from "@/lib/auth/password";
 import { createSessionCookie } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 import {
   businessRegistrationSchema,
+  collaboratorRegistrationSchema,
   creatorRegistrationSchema,
   type BusinessRegistrationInput,
+  type CollaboratorRegistrationInput,
   type CreatorRegistrationInput
 } from "@/lib/validation/register";
 
@@ -36,6 +42,18 @@ export interface BusinessRegistrationFieldErrors {
   readonly consentAccepted: readonly string[];
 }
 
+export interface CollaboratorRegistrationFieldErrors {
+  readonly organisationName: readonly string[];
+  readonly contactName: readonly string[];
+  readonly email: readonly string[];
+  readonly password: readonly string[];
+  readonly confirmPassword: readonly string[];
+  readonly organisationType: readonly string[];
+  readonly partnershipInterestSummary: readonly string[];
+  readonly consentAccepted: readonly string[];
+  readonly nonBindingAcknowledged: readonly string[];
+}
+
 export interface CreatorRegistrationActionState {
   readonly status: "idle" | "error";
   readonly message: string;
@@ -48,12 +66,22 @@ export interface BusinessRegistrationActionState {
   readonly fieldErrors: BusinessRegistrationFieldErrors;
 }
 
+export interface CollaboratorRegistrationActionState {
+  readonly status: "idle" | "error";
+  readonly message: string;
+  readonly fieldErrors: CollaboratorRegistrationFieldErrors;
+}
+
 type CreatorRegistrationSchemaFieldErrors = Partial<
   Record<keyof CreatorRegistrationFieldErrors, string[]>
 >;
 
 type BusinessRegistrationSchemaFieldErrors = Partial<
   Record<keyof BusinessRegistrationFieldErrors, string[]>
+>;
+
+type CollaboratorRegistrationSchemaFieldErrors = Partial<
+  Record<keyof CollaboratorRegistrationFieldErrors, string[]>
 >;
 
 const emptyCreatorRegistrationFieldErrors: CreatorRegistrationFieldErrors = {
@@ -76,6 +104,18 @@ const emptyBusinessRegistrationFieldErrors: BusinessRegistrationFieldErrors = {
   websiteUrl: [],
   phone: [],
   consentAccepted: []
+};
+
+const emptyCollaboratorRegistrationFieldErrors: CollaboratorRegistrationFieldErrors = {
+  organisationName: [],
+  contactName: [],
+  email: [],
+  password: [],
+  confirmPassword: [],
+  organisationType: [],
+  partnershipInterestSummary: [],
+  consentAccepted: [],
+  nonBindingAcknowledged: []
 };
 
 function getFormString(formData: FormData, key: string): string {
@@ -128,11 +168,33 @@ function getBusinessRegistrationFieldErrors(
   };
 }
 
+function getCollaboratorRegistrationFieldErrors(
+  fieldErrors: CollaboratorRegistrationSchemaFieldErrors
+): CollaboratorRegistrationFieldErrors {
+  return {
+    organisationName: fieldErrors.organisationName ?? [],
+    contactName: fieldErrors.contactName ?? [],
+    email: fieldErrors.email ?? [],
+    password: fieldErrors.password ?? [],
+    confirmPassword: fieldErrors.confirmPassword ?? [],
+    organisationType: fieldErrors.organisationType ?? [],
+    partnershipInterestSummary: fieldErrors.partnershipInterestSummary ?? [],
+    consentAccepted: fieldErrors.consentAccepted ?? [],
+    nonBindingAcknowledged: fieldErrors.nonBindingAcknowledged ?? []
+  };
+}
+
 function hasCreatorRegistrationFieldErrors(fieldErrors: CreatorRegistrationFieldErrors): boolean {
   return Object.values(fieldErrors).some((errors): boolean => errors.length > 0);
 }
 
 function hasBusinessRegistrationFieldErrors(fieldErrors: BusinessRegistrationFieldErrors): boolean {
+  return Object.values(fieldErrors).some((errors): boolean => errors.length > 0);
+}
+
+function hasCollaboratorRegistrationFieldErrors(
+  fieldErrors: CollaboratorRegistrationFieldErrors
+): boolean {
   return Object.values(fieldErrors).some((errors): boolean => errors.length > 0);
 }
 
@@ -172,6 +234,27 @@ function createBusinessErrorState(
       websiteUrl: fieldErrors.websiteUrl ?? [],
       phone: fieldErrors.phone ?? [],
       consentAccepted: fieldErrors.consentAccepted ?? []
+    }
+  };
+}
+
+function createCollaboratorErrorState(
+  message: string,
+  fieldErrors: Partial<Record<keyof CollaboratorRegistrationFieldErrors, readonly string[]>>
+): CollaboratorRegistrationActionState {
+  return {
+    status: "error",
+    message,
+    fieldErrors: {
+      organisationName: fieldErrors.organisationName ?? [],
+      contactName: fieldErrors.contactName ?? [],
+      email: fieldErrors.email ?? [],
+      password: fieldErrors.password ?? [],
+      confirmPassword: fieldErrors.confirmPassword ?? [],
+      organisationType: fieldErrors.organisationType ?? [],
+      partnershipInterestSummary: fieldErrors.partnershipInterestSummary ?? [],
+      consentAccepted: fieldErrors.consentAccepted ?? [],
+      nonBindingAcknowledged: fieldErrors.nonBindingAcknowledged ?? []
     }
   };
 }
@@ -263,6 +346,24 @@ async function getBusinessUniquenessErrors(
       existingProfile === null && existingListing === null
         ? []
         : ["This business listing slug is already taken."]
+  };
+}
+
+async function getCollaboratorUniquenessErrors(
+  input: CollaboratorRegistrationInput
+): Promise<CollaboratorRegistrationFieldErrors> {
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      normalizedEmail: input.email
+    },
+    select: {
+      id: true
+    }
+  });
+
+  return {
+    ...emptyCollaboratorRegistrationFieldErrors,
+    email: existingUser === null ? [] : ["An account with this email already exists."]
   };
 }
 
@@ -504,4 +605,137 @@ export async function registerBusinessAction(
   });
 
   redirect("/dashboard/client");
+}
+
+export async function registerCollaboratorAction(
+  _previousState: CollaboratorRegistrationActionState,
+  formData: FormData
+): Promise<CollaboratorRegistrationActionState> {
+  const parsedInput = collaboratorRegistrationSchema.safeParse({
+    organisationName: getFormString(formData, "organisationName"),
+    contactName: getFormString(formData, "contactName"),
+    email: getFormString(formData, "email"),
+    password: getFormString(formData, "password"),
+    confirmPassword: getFormString(formData, "confirmPassword"),
+    organisationType: getFormString(formData, "organisationType"),
+    partnershipInterestSummary: getFormString(formData, "partnershipInterestSummary"),
+    consentAccepted: formData.get("consentAccepted"),
+    nonBindingAcknowledged: formData.get("nonBindingAcknowledged")
+  });
+
+  if (!parsedInput.success) {
+    return createCollaboratorErrorState(
+      "Please review the highlighted fields.",
+      getCollaboratorRegistrationFieldErrors(parsedInput.error.flatten().fieldErrors)
+    );
+  }
+
+  const input = parsedInput.data;
+  const uniquenessErrors = await getCollaboratorUniquenessErrors(input);
+
+  if (hasCollaboratorRegistrationFieldErrors(uniquenessErrors)) {
+    return createCollaboratorErrorState("Please review the highlighted fields.", uniquenessErrors);
+  }
+
+  const passwordHash = await hashPassword(input.password);
+
+  let createdUser: {
+    readonly id: string;
+    readonly role: UserRole;
+  };
+
+  try {
+    createdUser = await prisma.$transaction(async (transaction) => {
+      const user = await transaction.user.create({
+        data: {
+          email: input.email,
+          normalizedEmail: input.email,
+          passwordHash,
+          role: UserRole.COLLABORATOR,
+          isActive: true,
+          approvalStatus: AccountApprovalStatus.PENDING
+        },
+        select: {
+          id: true,
+          role: true
+        }
+      });
+
+      await transaction.profile.create({
+        data: {
+          userId: user.id,
+          publicSlug: `collaborator-${user.id}`,
+          displayName: input.contactName,
+          bio: `${input.organisationName} collaborator contact profile.`,
+          isPublic: false
+        }
+      });
+
+      const application = await transaction.collaboratorApplication.create({
+        data: {
+          collaboratorId: user.id,
+          organisationName: input.organisationName,
+          organisationType: input.organisationType,
+          contactName: input.contactName,
+          partnershipInterestSummary: input.partnershipInterestSummary,
+          status: CollaboratorApplicationStatus.PENDING,
+          nonBindingAcknowledged: true
+        },
+        select: {
+          id: true
+        }
+      });
+
+      await writeAuditLog(
+        {
+          actorId: user.id,
+          action: "PUBLIC_REGISTRATION_CREATE",
+          resourceType: "User",
+          resourceId: user.id,
+          metadata: {
+            registrationType: "COLLABORATOR"
+          }
+        },
+        transaction
+      );
+
+      await writeAuditLog(
+        {
+          actorId: user.id,
+          action: "COLLABORATOR_APPLICATION_CREATE",
+          resourceType: "CollaboratorApplication",
+          resourceId: application.id,
+          metadata: {
+            status: "PENDING",
+            nonBindingAcknowledged: true
+          }
+        },
+        transaction
+      );
+
+      return user;
+    });
+  } catch (error: unknown) {
+    if (hasPrismaErrorCode(error, "P2002")) {
+      return createCollaboratorErrorState("This email is already in use.", {
+        email: ["This email may already be registered."]
+      });
+    }
+
+    return createCollaboratorErrorState(
+      "We could not create your collaborator account. Please try again.",
+      {}
+    );
+  }
+
+  revalidatePath("/dashboard/admin/users");
+  revalidatePath("/dashboard/admin/collaborators");
+  revalidatePath("/dashboard/admin/audit-logs");
+
+  await createSessionCookie({
+    userId: createdUser.id,
+    role: createdUser.role
+  });
+
+  redirect("/dashboard/collaborator");
 }

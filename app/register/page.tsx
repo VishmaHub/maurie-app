@@ -37,9 +37,9 @@ export default function RegisterPage() {
 
           <RegisterRoleCard
             title="Collaborator"
-            description="Register as a non-profit, community group, or collaborator to express interest in future campaign partnerships."
-            label="Coming soon"
-            isDisabled
+            description="Register as a non-profit, community group, or partner organisation to submit a non-binding campaign partnership interest."
+            href="/register/collaborator"
+            label="Available"
           />
         </div>
 
