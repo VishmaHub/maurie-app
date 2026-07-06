@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-:root {
+:root,
+html[data-theme="light"] {
   color-scheme: light;
 
   --maurie-yellow: #fdc324;
@@ -10,14 +11,57 @@
   --maurie-black: #131313;
   --maurie-grey: #7f7f7f;
 
+  --maurie-bg: #f7f3ef;
+  --maurie-bg-start: #f7f3ef;
+  --maurie-bg-mid: #fffaf0;
+  --maurie-bg-end: #f6eadc;
+
   --maurie-surface: rgba(247, 243, 239, 0.78);
   --maurie-surface-strong: rgba(247, 243, 239, 0.92);
+  --maurie-card: rgba(255, 255, 255, 0.72);
+  --maurie-card-strong: rgba(255, 255, 255, 0.88);
+
   --maurie-border: rgba(89, 55, 50, 0.18);
   --maurie-soft-border: rgba(89, 55, 50, 0.1);
+
   --maurie-text: #131313;
-  --maurie-muted: #6f6864;
+  --maurie-muted: #5f5650;
+  --maurie-inverted-text: #f7f3ef;
+
   --maurie-shadow: 0 24px 80px rgba(89, 55, 50, 0.14);
   --maurie-glow: 0 18px 60px rgba(234, 109, 48, 0.2);
+
+  --maurie-bg-glow-yellow: rgba(253, 195, 36, 0.26);
+  --maurie-bg-glow-orange: rgba(234, 109, 48, 0.2);
+  --maurie-bg-glow-brown: rgba(89, 55, 50, 0.1);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --maurie-bg: #131313;
+  --maurie-bg-start: #131313;
+  --maurie-bg-mid: #211a17;
+  --maurie-bg-end: #0d0d0d;
+
+  --maurie-surface: rgba(19, 19, 19, 0.72);
+  --maurie-surface-strong: rgba(19, 19, 19, 0.9);
+  --maurie-card: rgba(255, 255, 255, 0.07);
+  --maurie-card-strong: rgba(255, 255, 255, 0.1);
+
+  --maurie-border: rgba(253, 195, 36, 0.18);
+  --maurie-soft-border: rgba(253, 195, 36, 0.1);
+
+  --maurie-text: #f7f3ef;
+  --maurie-muted: #c8beb5;
+  --maurie-inverted-text: #131313;
+
+  --maurie-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+  --maurie-glow: 0 18px 60px rgba(253, 195, 36, 0.16);
+
+  --maurie-bg-glow-yellow: rgba(253, 195, 36, 0.16);
+  --maurie-bg-glow-orange: rgba(234, 109, 48, 0.16);
+  --maurie-bg-glow-brown: rgba(89, 55, 50, 0.45);
 }
 
 * {
@@ -26,6 +70,7 @@
 
 html {
   min-height: 100%;
+  background: var(--maurie-bg);
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -34,7 +79,7 @@ html {
 body {
   min-height: 100%;
   margin: 0;
-  background: var(--maurie-cream);
+  background: var(--maurie-bg);
   color: var(--maurie-text);
 }
 
@@ -57,9 +102,15 @@ select {
 
 .maurie-app-background {
   background:
-    radial-gradient(circle at 12% 8%, rgba(253, 195, 36, 0.26), transparent 30%),
-    radial-gradient(circle at 86% 18%, rgba(234, 109, 48, 0.2), transparent 32%),
-    linear-gradient(135deg, #f7f3ef 0%, #fffaf0 44%, #f6eadc 100%);
+    radial-gradient(circle at 12% 8%, var(--maurie-bg-glow-yellow), transparent 34%),
+    radial-gradient(circle at 86% 18%, var(--maurie-bg-glow-orange), transparent 34%),
+    radial-gradient(circle at 50% 110%, var(--maurie-bg-glow-brown), transparent 38%),
+    linear-gradient(
+      135deg,
+      var(--maurie-bg-start) 0%,
+      var(--maurie-bg-mid) 48%,
+      var(--maurie-bg-end) 100%
+    );
 }
 
 .maurie-glass {
@@ -72,7 +123,7 @@ select {
 
 .maurie-glass-soft {
   border: 1px solid var(--maurie-soft-border);
-  background: rgba(255, 255, 255, 0.52);
+  background: var(--maurie-card);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
@@ -110,8 +161,8 @@ select {
   justify-content: center;
   border-radius: 9999px;
   border: 1px solid var(--maurie-border);
-  background: rgba(247, 243, 239, 0.74);
-  color: var(--maurie-brown);
+  background: var(--maurie-card);
+  color: var(--maurie-text);
   box-shadow: 0 12px 32px rgba(89, 55, 50, 0.1);
   font-size: 0.875rem;
   font-weight: 700;
@@ -125,17 +176,44 @@ select {
 
 .maurie-button-secondary:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.78);
+  background: var(--maurie-card-strong);
   box-shadow: 0 18px 42px rgba(89, 55, 50, 0.14);
 }
 
 .maurie-pill {
   border: 1px solid var(--maurie-border);
-  background: rgba(247, 243, 239, 0.76);
-  color: var(--maurie-brown);
+  background: var(--maurie-card);
+  color: var(--maurie-text);
   box-shadow: 0 10px 24px rgba(89, 55, 50, 0.08);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+}
+
+.maurie-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--maurie-border);
+  background: var(--maurie-card);
+  color: var(--maurie-text);
+  box-shadow: 0 10px 28px rgba(89, 55, 50, 0.1);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.75rem 1rem;
+  transition:
+    transform 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.maurie-theme-toggle:hover {
+  transform: translateY(-1px);
+  border-color: var(--maurie-orange);
+  background: var(--maurie-card-strong);
+  box-shadow: 0 16px 38px rgba(89, 55, 50, 0.14);
 }
 
 .maurie-nav-link {
@@ -149,69 +227,22 @@ select {
 
 .maurie-nav-link:hover {
   border-color: var(--maurie-border);
-  background: rgba(255, 255, 255, 0.56);
+  background: var(--maurie-card);
   box-shadow: 0 14px 34px rgba(89, 55, 50, 0.1);
   transform: translateY(-1px);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-
-    --maurie-surface: rgba(19, 19, 19, 0.72);
-    --maurie-surface-strong: rgba(19, 19, 19, 0.9);
-    --maurie-border: rgba(253, 195, 36, 0.18);
-    --maurie-soft-border: rgba(253, 195, 36, 0.1);
-    --maurie-text: #f7f3ef;
-    --maurie-muted: #c8beb5;
-    --maurie-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
-    --maurie-glow: 0 18px 60px rgba(253, 195, 36, 0.16);
-  }
-
-  body {
-    background: var(--maurie-black);
-    color: var(--maurie-text);
-  }
-
-  .maurie-app-background {
-    background:
-      radial-gradient(circle at 12% 8%, rgba(253, 195, 36, 0.16), transparent 34%),
-      radial-gradient(circle at 86% 18%, rgba(234, 109, 48, 0.16), transparent 34%),
-      linear-gradient(135deg, #131313 0%, #211a17 48%, #0d0d0d 100%);
-  }
-
-  .maurie-glass-soft {
-    background: rgba(255, 255, 255, 0.06);
-  }
-
-  .maurie-button-secondary {
-    background: rgba(247, 243, 239, 0.08);
-    color: var(--maurie-cream);
-  }
-
-  .maurie-button-secondary:hover {
-    background: rgba(247, 243, 239, 0.14);
-  }
-
-  .maurie-pill {
-    background: rgba(247, 243, 239, 0.08);
-    color: var(--maurie-cream);
-  }
-
-  .maurie-nav-link:hover {
-    background: rgba(247, 243, 239, 0.08);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .maurie-button-primary,
   .maurie-button-secondary,
+  .maurie-theme-toggle,
   .maurie-nav-link {
     transition: none;
   }
 
   .maurie-button-primary:hover,
   .maurie-button-secondary:hover,
+  .maurie-theme-toggle:hover,
   .maurie-nav-link:hover {
     transform: none;
   }
