@@ -1,9 +1,9 @@
 /**
  * Register page content provider.
  *
- * This file keeps the public registration page content out of the route component.
- * For the MVP, this is a local content source. In the next admin-content phase,
- * this function can be changed to read from Prisma without rewriting the page UI.
+ * This keeps public registration copy separate from the page layout.
+ * For now, this file is the content source. Later, this can be replaced by
+ * Prisma-backed admin content without changing the UI components.
  */
 
 export interface RegisterPathwayContent {
@@ -35,70 +35,55 @@ export interface RegisterPageContent {
 const registerPageContent: RegisterPageContent = {
   brandTitle: "Mauri-E",
   brandSubtitle: "Public Platform Beta",
-  badge: "Choose your pathway",
-  heading: "Join the Mauri-E platform.",
+  badge: "Choose your account type",
+  heading: "Start with the right pathway.",
   description:
-    "Start as a creator, business, or collaborator. Each pathway creates the right account, dashboard, and draft workspace for your role.",
+    "Join Mauri-E as a creator, business, or collaborator. Each pathway creates the right dashboard, draft workspace, and access level for your role.",
   loginHref: "/login",
   pathways: [
     {
       title: "Creator",
-      eyebrow: "Profiles / vCards / Bookings",
+      eyebrow: "Profiles · vCards · Bookings",
       description:
-        "Create a public creative identity for your work, portfolio, digital vCard, and future booking opportunities.",
+        "Build a public creative profile, prepare your digital vCard, and showcase your work before publishing.",
       href: "/register/creator",
       label: "Available",
-      status: "Your profile starts as a private draft.",
-      highlights: [
-        "Create your creator account",
-        "Prepare your public profile and vCard",
-        "Showcase work before publishing"
-      ]
+      status: "Profile starts as a private draft.",
+      highlights: ["Creator dashboard", "Draft public profile", "vCard-ready account"]
     },
     {
       title: "Business",
-      eyebrow: "Listings / Services / Directory",
+      eyebrow: "Listings · Services · Directory",
       description:
-        "Register your business, prepare a public listing, and access Mauri-E services through your client dashboard.",
+        "Register your business, prepare a public listing, and manage Mauri-E service requests from your client dashboard.",
       href: "/register/business",
       label: "Available",
-      status: "Your business listing starts unpublished.",
-      highlights: [
-        "Create your business account",
-        "Prepare a public listing",
-        "Request digital, creative, and support services"
-      ]
+      status: "Business listing starts unpublished.",
+      highlights: ["Client dashboard", "Draft business listing", "Service request access"]
     },
     {
       title: "Collaborator",
-      eyebrow: "Campaigns / Community / Partnerships",
+      eyebrow: "Campaigns · Community · Partnerships",
       description:
-        "Apply as a non-profit, community group, or partner organisation for future non-binding campaign collaboration.",
+        "Apply as a non-profit, community group, or partner organisation for future campaign collaboration.",
       href: "/register/collaborator",
-      label: "Review Required",
-      status: "Your application starts as pending approval.",
-      highlights: [
-        "Create a collaborator account",
-        "Submit a partnership application",
-        "Campaign access unlocks after approval"
-      ]
+      label: "Review",
+      status: "Application starts as pending approval.",
+      highlights: ["Collaborator dashboard", "Partnership application", "Approval-gated campaigns"]
     }
   ],
   infoBlocks: [
     {
-      title: "Private by default",
-      description:
-        "Creator profiles and business listings start as drafts until they are ready to be published."
+      title: "Draft-first",
+      description: "Profiles and listings stay private until they are ready to publish."
     },
     {
       title: "Approval-aware",
-      description:
-        "Collaborator campaign access remains restricted while applications are pending review."
+      description: "Collaborator campaign access stays restricted until Mauri-E review."
     },
     {
-      title: "Built safely",
-      description:
-        "This MVP does not process investments, financial products, or subscription payments yet."
+      title: "MVP-safe",
+      description: "No investment payments, financial products, or subscription billing yet."
     }
   ]
 };
@@ -106,8 +91,8 @@ const registerPageContent: RegisterPageContent = {
 /**
  * Reads registration page content.
  *
- * This is intentionally async so the page API will not change when the content
- * later moves to an admin-controlled database table.
+ * Kept async so this can later read from an admin-controlled database table
+ * without changing the route component contract.
  */
 export async function getRegisterPageContent(): Promise<RegisterPageContent> {
   return registerPageContent;

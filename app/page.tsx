@@ -1,93 +1,87 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getAuthenticatedSession } from "@/lib/auth/session";
-import { ROLE_DASHBOARD_PATHS } from "@/lib/navigation";
+import { RegisterRoleCard } from "@/components/public/register-role-card";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { getRegisterPageContent } from "@/lib/public/register-content";
 
-const platformMetrics = [
-  {
-    label: "Roles",
-    value: "3",
-    description: "Clients, creatives, and collaborators"
-  },
-  {
-    label: "Core Layers",
-    value: "6",
-    description: "Projects, contracts, invoices, bookings, listings, EOI"
-  },
-  {
-    label: "Security Model",
-    value: "Zero Trust",
-    description: "RBAC-first architecture from the foundation"
-  }
-] as const;
-
-export default async function HomePage() {
-  const session = await getAuthenticatedSession();
-
-  if (session !== null) {
-    redirect(ROLE_DASHBOARD_PATHS[session.role]);
-  }
+/**
+ * RegisterPage is the public entry point into the Mauri-E platform.
+ *
+ * It presents role-based registration pathways while relying on the global
+ * theme system for dark/light styling.
+ */
+export default async function RegisterPage() {
+  const content = await getRegisterPageContent();
 
   return (
-    <main className="flex min-h-dvh items-center justify-center px-4 py-12">
-      <section className="maurie-glass grid w-full max-w-6xl gap-10 rounded-[2rem] p-6 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
-        <div className="flex flex-col justify-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[rgba(89,55,50,0.16)] bg-[linear-gradient(135deg,var(--maurie-yellow),var(--maurie-orange))] text-base font-black tracking-tight text-[var(--maurie-black)] shadow-[0_14px_34px_rgba(234,109,48,0.24)]">
-            ME
-          </div>
+    <main className="min-h-screen text-[var(--maurie-text)]">
+      <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-5 sm:px-6 sm:py-6">
+        {/* Top navigation is intentionally minimal for registration conversion. */}
+        <header className="flex items-center justify-between gap-3">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--maurie-yellow)] text-sm font-black text-[var(--maurie-black)] shadow-[0_16px_40px_rgba(253,195,36,0.22)]">
+              M
+            </span>
 
-          <p className="mt-8 text-sm font-medium uppercase tracking-[0.3em] text-[var(--maurie-muted)]">
-            Mauri-E Platform
-          </p>
+            <span className="grid">
+              <span className="text-sm font-semibold text-[var(--maurie-text)]">
+                {content.brandTitle}
+              </span>
 
-          <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.96] tracking-tight text-[var(--maurie-text)] sm:text-6xl">
-            The operating system for purpose-driven businesses, creators, and collaborators.
-          </h1>
+              <span className="text-xs text-[var(--maurie-muted)]">{content.brandSubtitle}</span>
+            </span>
+          </Link>
 
-          <p className="mt-6 max-w-2xl text-base leading-8 text-[var(--maurie-muted)] sm:text-lg">
-            Mauri-E brings project delivery, contracts, invoices, creative portfolios, campaign
-            rooms, business listings, and film investment workflows into one secure digital
-            ecosystem.
-          </p>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/login" className="maurie-button-primary">
-              Sign in securely
-            </Link>
-
-            <Link href="/login" className="maurie-button-secondary">
-              View demo access
+            <Link href={content.loginHref} className="maurie-button-secondary min-w-0 px-4 py-3">
+              Login
             </Link>
           </div>
-        </div>
+        </header>
 
-        <div className="rounded-[2rem] border border-[var(--maurie-border)] bg-[var(--maurie-black)] p-5 text-[var(--maurie-cream)] shadow-[0_24px_80px_rgba(89,55,50,0.22)]">
-          <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-2xl">
-            <p className="text-xs font-medium uppercase tracking-[0.24em] text-white/60">
-              Foundation Status
-            </p>
+        <div className="flex flex-1 flex-col justify-center gap-8 py-8 sm:gap-10 sm:py-14">
+          {/* Hero is intentionally shorter on mobile so the first card appears quickly. */}
+          <div className="mx-auto grid max-w-4xl gap-4 text-center sm:gap-5">
+            <div className="mx-auto inline-flex w-fit rounded-full border border-[var(--maurie-border)] bg-[var(--maurie-card)] px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[var(--maurie-orange)] shadow-[0_10px_30px_rgba(89,55,50,0.08)]">
+              {content.badge}
+            </div>
 
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight">
-              Authentication foundation active.
-            </h2>
+            <h1 className="text-3xl font-semibold tracking-[-0.04em] text-[var(--maurie-text)] sm:text-5xl lg:text-7xl">
+              {content.heading}
+            </h1>
 
-            <p className="mt-4 text-sm leading-6 text-white/70">
-              The platform now supports secure seeded users, password verification, HttpOnly
-              sessions, and role-aware dashboard routing.
+            <p className="mx-auto max-w-2xl text-sm leading-7 text-[var(--maurie-muted)] sm:text-base lg:text-lg">
+              {content.description}
             </p>
           </div>
 
-          <div className="mt-4 grid gap-3">
-            {platformMetrics.map((metric) => (
-              <div
-                key={metric.label}
-                className="rounded-3xl border border-white/10 bg-white/10 p-4 backdrop-blur-xl"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <p className="text-sm text-white/60">{metric.label}</p>
-                  <p className="text-sm font-semibold text-white">{metric.value}</p>
-                </div>
-                <p className="mt-2 text-xs leading-5 text-white/60">{metric.description}</p>
+          {/* Registration pathways are data-driven and can be moved to admin settings later. */}
+          <div className="grid gap-4 lg:grid-cols-3">
+            {content.pathways.map((pathway, index) => (
+              <RegisterRoleCard
+                key={pathway.title}
+                index={index}
+                title={pathway.title}
+                eyebrow={pathway.eyebrow}
+                description={pathway.description}
+                href={pathway.href}
+                label={pathway.label}
+                status={pathway.status}
+                highlights={pathway.highlights}
+              />
+            ))}
+          </div>
+
+          {/* Safety notes keep the MVP positioning clear without adding legal/payment complexity. */}
+          <div className="grid gap-4 rounded-[1.5rem] border border-[var(--maurie-border)] bg-[var(--maurie-card)] p-4 shadow-[var(--maurie-shadow)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:p-5 lg:grid-cols-3">
+            {content.infoBlocks.map((infoBlock) => (
+              <div key={infoBlock.title}>
+                <p className="text-sm font-semibold text-[var(--maurie-text)]">{infoBlock.title}</p>
+
+                <p className="mt-2 text-sm leading-6 text-[var(--maurie-muted)]">
+                  {infoBlock.description}
+                </p>
               </div>
             ))}
           </div>
