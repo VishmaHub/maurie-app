@@ -1,10 +1,12 @@
+import { prisma } from "@/lib/prisma";
+
 /**
- * Register page content provider.
+ * Platform setting key used to store public register page content.
  *
- * This keeps public registration copy separate from the page layout.
- * For now, this file is the content source. Later, this can be replaced by
- * Prisma-backed admin content without changing the UI components.
+ * The value is stored as a JSON string in PlatformSetting.value because the
+ * existing settings model already supports string-based configurable values.
  */
+export const REGISTER_PAGE_CONTENT_SETTING_KEY = "public.register.content";
 
 export interface RegisterPathwayContent {
   readonly title: string;
@@ -32,7 +34,13 @@ export interface RegisterPageContent {
   readonly infoBlocks: readonly RegisterInfoBlockContent[];
 }
 
-const registerPageContent: RegisterPageContent = {
+/**
+ * Fallback register page content.
+ *
+ * This protects /register from breaking if the admin setting is missing,
+ * empty, or contains invalid JSON.
+ */
+export const DEFAULT_REGISTER_PAGE_CONTENT: RegisterPageContent = {
   brandTitle: "Mauri-E",
   brandSubtitle: "Public Platform Beta",
   badge: "Choose your account type",
@@ -88,12 +96,100 @@ const registerPageContent: RegisterPageContent = {
   ]
 };
 
+function isString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isStringArray(value: unknown): value is readonly string[] {
+  return Array.isArray(value) && value.every((item) => isString(item));
+}
+
+function isRegisterPathwayContent(value: unknown): value is RegisterPathwayContent {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  return (
+    isString(record.title) &&
+    isString(record.eyebrow) &&
+    isString(record.description) &&
+    isString(record.href) &&
+    isString(record.label) &&
+    isString(record.status) &&
+    isStringArray(record.highlights)
+  );
+}
+
+function isRegisterInfoBlockContent(value: unknown): value is RegisterInfoBlockContent {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  return isString(record.title) && isString(record.description);
+}
+
+function isRegisterPageContent(value: unknown): value is RegisterPageContent {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  return (
+    isString(record.brandTitle) &&
+    isString(record.brandSubtitle) &&
+    isString(record.badge) &&
+    isString(record.heading) &&
+    isString(record.description) &&
+    isString(record.loginHref) &&
+    Array.isArray(record.pathways) &&
+    record.pathways.length > 0 &&
+    record.pathways.every(isRegisterPathwayContent) &&
+    Array.isArray(record.infoBlocks) &&
+    record.infoBlocks.length > 0 &&
+    record.infoBlocks.every(isRegisterInfoBlockContent)
+  );
+}
+
+function parseRegisterPageContent(value: string): RegisterPageContent | null {
+  try {
+    const parsedValue: unknown = JSON.parse(value);
+
+    if (isRegisterPageContent(parsedValue)) {
+      return parsedValue;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Reads registration page content.
  *
- * Kept async so this can later read from an admin-controlled database table
- * without changing the route component contract.
+ * The content is now admin-controllable through PlatformSetting. If the setting
+ * is missing or invalid, the page falls back to safe default content.
  */
 export async function getRegisterPageContent(): Promise<RegisterPageContent> {
-  return registerPageContent;
+  const setting = await prisma.platformSetting.findUnique({
+    where: {
+      key: REGISTER_PAGE_CONTENT_SETTING_KEY
+    },
+    select: {
+      value: true
+    }
+  });
+
+  if (setting === null) {
+    return DEFAULT_REGISTER_PAGE_CONTENT;
+  }
+
+  const parsedContent = parseRegisterPageContent(setting.value);
+
+  return parsedContent ?? DEFAULT_REGISTER_PAGE_CONTENT;
 }
