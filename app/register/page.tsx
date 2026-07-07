@@ -3,6 +3,8 @@ import { RegisterRoleCard } from "@/components/public/register-role-card";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { getRegisterPageContent } from "@/lib/public/register-content";
 
+export const dynamic = "force-dynamic";
+
 /**
  * RegisterPage is the public entry point into the Mauri-E platform.
  *
