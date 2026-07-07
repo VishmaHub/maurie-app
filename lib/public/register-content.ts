@@ -132,7 +132,7 @@ function isRegisterInfoBlockContent(value: unknown): value is RegisterInfoBlockC
   return isString(record.title) && isString(record.description);
 }
 
-function isRegisterPageContent(value: unknown): value is RegisterPageContent {
+export function isRegisterPageContent(value: unknown): value is RegisterPageContent {
   if (typeof value !== "object" || value === null) {
     return false;
   }
@@ -155,7 +155,7 @@ function isRegisterPageContent(value: unknown): value is RegisterPageContent {
   );
 }
 
-function parseRegisterPageContent(value: string): RegisterPageContent | null {
+export function parseRegisterPageContent(value: string): RegisterPageContent | null {
   try {
     const parsedValue: unknown = JSON.parse(value);
 
@@ -168,6 +168,16 @@ function parseRegisterPageContent(value: string): RegisterPageContent | null {
     return null;
   }
 }
+
+/**
+ * Formats register page content for storage in PlatformSetting.value.
+ *
+ * This keeps admin-edited JSON readable and consistent.
+ */
+export function formatRegisterPageContentForStorage(content: RegisterPageContent): string {
+  return JSON.stringify(content, null, 2);
+}
+
 
 /**
  * Reads registration page content.

@@ -5,6 +5,11 @@ import { redirect } from "next/navigation";
 import { writeAuditLog } from "@/lib/audit/audit-log";
 import { requireRole } from "@/lib/auth/require-role";
 import { prisma } from "@/lib/prisma";
+import {
+  formatRegisterPageContentForStorage,
+  parseRegisterPageContent,
+  REGISTER_PAGE_CONTENT_SETTING_KEY
+} from "@/lib/public/register-content";
 
 function getFormString(formData: FormData, key: string): string | null {
   const value = formData.get(key);
@@ -43,14 +48,54 @@ function getSettingsRedirectUrl(status: string, key?: string, returnPath?: strin
   return `${targetPath}?${searchParams.toString()}`;
 }
 
-function normaliseSettingValue(valueType: string, rawValue: string): string | null {
+function normaliseRegisterContentValue(rawValue: string): string | null {
   const value = rawValue.trim();
 
-  if (valueType === "SECRET") {
+  if (value.length === 0) {
     return null;
   }
 
+  const parsedRegisterContent = parseRegisterPageContent(value);
+
+  if (parsedRegisterContent === null) {
+    return null;
+  }
+
+  return formatRegisterPageContentForStorage(parsedRegisterContent);
+}
+
+function normaliseJsonSettingValue(rawValue: string): string | null {
+  const value = rawValue.trim();
+
   if (value.length === 0) {
+    return null;
+  }
+
+  try {
+    return JSON.stringify(JSON.parse(value), null, 2);
+  } catch {
+    return null;
+  }
+}
+
+function normaliseSettingValue(settingKey: string, valueType: string, rawValue: string): string | null {
+  const value = rawValue.trim();
+
+  if (value.length === 0) {
+    return null;
+  }
+
+  /**
+   * Register page content is validated by key, not only by valueType.
+   *
+   * This protects the editor even if the PlatformSetting row was manually
+   * created with valueType STRING instead of JSON.
+   */
+  if (settingKey === REGISTER_PAGE_CONTENT_SETTING_KEY) {
+    return normaliseRegisterContentValue(rawValue);
+  }
+
+  if (valueType === "SECRET") {
     return null;
   }
 
@@ -80,6 +125,10 @@ function normaliseSettingValue(valueType: string, rawValue: string): string | nu
     }
 
     return value.toLowerCase();
+  }
+
+  if (valueType === "JSON") {
+    return normaliseJsonSettingValue(rawValue);
   }
 
   if (value.length > 500) {
@@ -121,7 +170,7 @@ export async function updatePlatformSettingAction(formData: FormData): Promise<v
     redirect(getSettingsRedirectUrl("locked", setting.key, returnPath));
   }
 
-  const nextValue = normaliseSettingValue(setting.valueType, rawValue);
+  const nextValue = normaliseSettingValue(setting.key, setting.valueType, rawValue);
 
   if (nextValue === null) {
     redirect(getSettingsRedirectUrl("invalid", setting.key, returnPath));
@@ -132,7 +181,11 @@ export async function updatePlatformSettingAction(formData: FormData): Promise<v
       id: setting.id
     },
     data: {
-      value: nextValue
+      value: nextValue,
+      valueType:
+        setting.key === REGISTER_PAGE_CONTENT_SETTING_KEY && setting.valueType !== "JSON"
+          ? "JSON"
+          : setting.valueType
     }
   });
 
@@ -143,13 +196,17 @@ export async function updatePlatformSettingAction(formData: FormData): Promise<v
     resourceId: setting.id,
     metadata: {
       key: setting.key,
-      valueType: setting.valueType,
+      valueType: setting.key === REGISTER_PAGE_CONTENT_SETTING_KEY ? "JSON" : setting.valueType,
       changed: setting.value !== nextValue
     }
   });
 
   revalidatePath("/dashboard/admin/settings");
   revalidatePath(returnPath);
+
+  if (setting.key === REGISTER_PAGE_CONTENT_SETTING_KEY) {
+    revalidatePath("/register");
+  }
 
   redirect(getSettingsRedirectUrl("updated", setting.key, returnPath));
 }

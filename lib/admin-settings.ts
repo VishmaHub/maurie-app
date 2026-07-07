@@ -1,3 +1,9 @@
+import {
+  DEFAULT_REGISTER_PAGE_CONTENT,
+  formatRegisterPageContentForStorage,
+  REGISTER_PAGE_CONTENT_SETTING_KEY
+} from "@/lib/public/register-content";
+
 import { prisma } from "@/lib/prisma";
 
 export interface AdminPlatformSetting {
@@ -151,6 +157,15 @@ const defaultPlatformSettings: readonly DefaultPlatformSetting[] = [
     value: "configured_in_environment",
     valueType: "SECRET",
     isSensitive: true
+  },
+  {
+    key: REGISTER_PAGE_CONTENT_SETTING_KEY,
+    label: "Public Register Page Content",
+    description: "Controls the copy and pathway cards shown on the public /register page.",
+    category: "Public Content",
+    value: formatRegisterPageContentForStorage(DEFAULT_REGISTER_PAGE_CONTENT),
+    valueType: "JSON",
+    isSensitive: false
   }
 ];
 

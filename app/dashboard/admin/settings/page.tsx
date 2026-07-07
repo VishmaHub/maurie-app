@@ -129,6 +129,19 @@ function renderSettingInput(setting: AdminPlatformSetting) {
     );
   }
 
+  if (setting.valueType === "JSON") {
+    return (
+      <textarea
+        name="value"
+        defaultValue={setting.value}
+        rows={16}
+        className={`${baseClass} min-h-80 resize-y font-mono leading-6`}
+        aria-label={`${setting.label} JSON value`}
+        spellCheck={false}
+      />
+    );
+  }
+
   return (
     <input
       name="value"
@@ -257,8 +270,8 @@ export default async function AdminSettingsPage(props: AdminSettingsPageProps) {
 
         <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--maurie-muted)]">
           Non-sensitive settings can be edited directly. Boolean values must be true or false,
-          number values must be numeric, colour values must use a 6-digit hex code, and secret
-          settings remain locked.
+          number values must be numeric, colour values must use a 6-digit hex code, JSON values must
+          be valid JSON, and secret values are masked and locked from browser-based editing.
         </p>
       </section>
 
