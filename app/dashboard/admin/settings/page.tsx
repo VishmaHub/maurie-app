@@ -212,9 +212,15 @@ export default async function AdminSettingsPage(props: AdminSettingsPageProps) {
           </p>
         </div>
 
-        <Link href="/dashboard/admin" className="maurie-button-secondary">
-          Back to Admin
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/dashboard/admin/settings/register-content" className="maurie-button-primary">
+            Register Content Editor
+          </Link>
+
+          <Link href="/dashboard/admin" className="maurie-button-secondary">
+            Back to Admin
+          </Link>
+        </div>
       </div>
 
       {notice === null ? null : (

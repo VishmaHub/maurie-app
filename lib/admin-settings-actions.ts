@@ -78,7 +78,11 @@ function normaliseJsonSettingValue(rawValue: string): string | null {
   }
 }
 
-function normaliseSettingValue(settingKey: string, valueType: string, rawValue: string): string | null {
+function normaliseSettingValue(
+  settingKey: string,
+  valueType: string,
+  rawValue: string
+): string | null {
   const value = rawValue.trim();
 
   if (value.length === 0) {
